@@ -1,0 +1,4 @@
+rootProject.name = 'tic-tac-toe-services'
+include 'Logger'
+include 'Library'
+
