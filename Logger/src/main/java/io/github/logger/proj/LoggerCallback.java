@@ -1,9 +1,9 @@
 package io.github.logger.proj;
 
-import io.github.API.proj.ISubscribeCallback;
-import io.github.API.proj.MessageResultAPI;
-import io.github.API.proj.MessagingAPI;
-import io.github.API.proj.utils.GsonWrapper;
+import io.github.API.ISubscribeCallback;
+import io.github.API.MessageResultAPI;
+import io.github.API.MessagingAPI;
+import io.github.API.utils.GsonWrapper;
 import io.github.library.proj.messages.Channels;
 import io.github.library.proj.messages.MoveData;
 import io.github.library.proj.messages.RoomData;

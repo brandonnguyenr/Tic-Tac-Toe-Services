@@ -1,6 +1,6 @@
 package io.github.logger.proj;
 
-import io.github.API.proj.MessagingAPI;
+import io.github.API.MessagingAPI;
 import io.github.library.proj.messages.Channels;
 
 import java.io.IOException;
