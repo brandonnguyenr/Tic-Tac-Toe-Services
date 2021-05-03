@@ -23,4 +23,4 @@ test {
     useJUnitPlatform()
 }
 
-mainClassName = 'io.github.donut.proj.Logger'
+mainClassName = 'io.github.recorder.proj.Recorder'
