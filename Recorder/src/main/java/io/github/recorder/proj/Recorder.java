@@ -1,18 +1,18 @@
-package io.github.logger.proj;
+package io.github.recorder.proj;
 
 import io.github.API.MessagingAPI;
 import io.github.library.proj.messages.Channels;
 
 import java.io.IOException;
 
-public class Logger {
+public class Recorder {
     private MessagingAPI api;
-    private LoggerCallback callback;
+    private RecorderCallback callback;
 
-    public Logger() {
+    public Recorder() {
         try {
             api = new MessagingAPI();
-            callback = new LoggerCallback();
+            callback = new RecorderCallback();
 
             api.subscribe().channels(Channels.ROOM_MOVE.toString(), Channels.ROOM.toString()).execute();
             api.addEventListener(callback, Channels.ROOM_MOVE.toString(), Channels.ROOM.toString());
@@ -23,6 +23,6 @@ public class Logger {
     }
 
     public static void main(String[] args) {
-        new Logger();
+        new Recorder();
     }
 }

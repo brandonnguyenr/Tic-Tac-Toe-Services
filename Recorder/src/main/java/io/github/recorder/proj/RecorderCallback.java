@@ -1,4 +1,4 @@
-package io.github.logger.proj;
+package io.github.recorder.proj;
 
 import io.github.API.ISubscribeCallback;
 import io.github.API.MessageResultAPI;
@@ -8,7 +8,7 @@ import io.github.library.proj.messages.Channels;
 import io.github.library.proj.messages.MoveData;
 import io.github.library.proj.messages.RoomData;
 
-public class LoggerCallback implements ISubscribeCallback {
+public class RecorderCallback implements ISubscribeCallback {
     @Override
     public void resolved(MessagingAPI messagingAPI, MessageResultAPI messageResultAPI) {
         if (messageResultAPI.getChannel().equals(Channels.ROOM_MOVE.toString())) {

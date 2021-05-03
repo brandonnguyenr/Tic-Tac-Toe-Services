@@ -1,8 +1,8 @@
-package io.github.logger.proj;
+package io.github.recorder.proj;
 
 import io.github.library.proj.messages.MoveData;
 import io.github.library.proj.messages.RoomData;
-import io.github.logger.proj.utils.PreparedStatementWrapper;
+import io.github.recorder.proj.utils.PreparedStatementWrapper;
 
 import java.sql.Connection;
 import java.sql.SQLException;

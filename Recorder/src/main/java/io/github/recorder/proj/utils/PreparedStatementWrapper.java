@@ -1,4 +1,4 @@
-package io.github.logger.proj.utils;
+package io.github.recorder.proj.utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

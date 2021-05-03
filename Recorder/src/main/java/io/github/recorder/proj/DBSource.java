@@ -1,4 +1,4 @@
-package io.github.logger.proj;
+package io.github.recorder.proj;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 

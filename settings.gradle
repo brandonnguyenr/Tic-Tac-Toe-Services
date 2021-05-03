@@ -1,4 +1,4 @@
 rootProject.name = 'tic-tac-toe-services'
-include 'Logger'
+include 'Recorder'
 include 'Library'
 
