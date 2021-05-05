@@ -18,10 +18,12 @@ public class RoomsCallback implements ISubscribeCallback {
 
     @Override
     public void resolved(MessagingAPI messagingAPI, MessageResultAPI messageResultAPI) {
-        messagingAPI.publish()
+        if (messageResultAPI.getChannel().equals(Channels.ROOM_LIST.toString())) {
+            messagingAPI.publish()
                     .message(GsonWrapper.toJson(roomDataList.toArray()))
                     .channel(Channels.ROOM.toString())
                     .execute();
+        }
     }
 
     @Override
