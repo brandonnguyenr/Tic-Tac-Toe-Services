@@ -1,8 +1,9 @@
 package io.github.gameengine.proj;
 
 import io.github.API.ISubscribeCallback;
-import io.github.API.MessageResultAPI;
 import io.github.API.MessagingAPI;
+import io.github.API.messagedata.MsgResultAPI;
+import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.library.proj.messages.Channels;
 import io.github.library.proj.messages.RoomData;
@@ -17,8 +18,13 @@ public class RoomsCallback implements ISubscribeCallback {
     }
 
     @Override
-    public void resolved(MessagingAPI messagingAPI, MessageResultAPI messageResultAPI) {
-        if (messageResultAPI.getChannel().equals(Channels.ROOM_LIST.toString())) {
+    public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
+
+    }
+
+    @Override
+    public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
+        if (msgResultAPI.getChannel().equals(Channels.ROOM_LIST.toString())) {
             messagingAPI.publish()
                     .message(GsonWrapper.toJson(roomDataList.toArray()))
                     .channel(Channels.ROOM.toString())
@@ -27,7 +33,7 @@ public class RoomsCallback implements ISubscribeCallback {
     }
 
     @Override
-    public void rejected(Exception e) throws Exception {
-        ISubscribeCallback.super.rejected(e);
+    public void rejected(Exception e) {
+
     }
 }

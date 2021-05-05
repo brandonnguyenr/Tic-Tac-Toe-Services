@@ -1,8 +1,9 @@
 package io.github.gameengine.proj;
 
 import io.github.API.ISubscribeCallback;
-import io.github.API.MessageResultAPI;
 import io.github.API.MessagingAPI;
+import io.github.API.messagedata.MsgResultAPI;
+import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.library.proj.enginedata.Board;
 import io.github.library.proj.enginedata.Lobby;
@@ -51,10 +52,16 @@ public class MoveCallback implements ISubscribeCallback {
                         board.getUnderlyingBoard()[0][2] == token);
     }
 
+
     @Override
-    public void resolved(MessagingAPI messagingAPI, MessageResultAPI messageResultAPI) {
-        if (messageResultAPI.getChannel().equals(Channels.ROOM_MOVE.toString())) {
-            MoveData data = GsonWrapper.fromJson(messageResultAPI.getMessage(), MoveData.class);
+    public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
+
+    }
+
+    @Override
+    public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
+        if (msgResultAPI.getChannel().equals(Channels.ROOM_MOVE.toString())) {
+            MoveData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), MoveData.class);
             int roomID = data.getRoomID();
             if (isValidMove(data)) {
                 Lobby lobby = lobbyList.get(roomID);
@@ -83,11 +90,10 @@ public class MoveCallback implements ISubscribeCallback {
                 }
             }
         }
-
     }
 
     @Override
-    public void rejected(Exception e) throws Exception {
-        ISubscribeCallback.super.rejected(e);
+    public void rejected(Exception e) {
+
     }
 }
