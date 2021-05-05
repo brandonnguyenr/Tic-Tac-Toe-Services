@@ -6,10 +6,12 @@ import io.github.API.MessagingAPI;
 import io.github.API.utils.GsonWrapper;
 import io.github.library.proj.enginedata.Board;
 import io.github.library.proj.enginedata.Lobby;
+import io.github.library.proj.enginedata.Token;
 import io.github.library.proj.messages.MoveData;
 import io.github.library.proj.messages.MoveRequestData;
-import io.github.library.proj.enginedata.Token;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class MoveCallback implements ISubscribeCallback {
@@ -60,10 +62,23 @@ public class MoveCallback implements ISubscribeCallback {
             if (isWinner(lobby.getBoard(), token) || lobby.getBoard().isBoardFull()) {
                 messagingAPI.publish()
                             .message(GsonWrapper.toJson(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null)))
-                            .channel("test").execute();
+                            .channel(lobby.getRoomData().getRoomChannel().toString()).execute();
+                lobby.endGame();
+            } else {
+                lobby.toggleCurrentPlayer();
+
+                List<String> outGoingChannels = new LinkedList<>();
+                outGoingChannels.add(lobby.getRoomData().getRoomChannel().toString());
+                if (lobby.getRoomData().getPlayer2().isAI())
+                    outGoingChannels.add(lobby.getRoomData().getPlayer2().getChannel());
+
+                for (var channelName : outGoingChannels) {
+                    messagingAPI.publish()
+                            .message(GsonWrapper.toJson(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), lobby.getCurrentPlayer())))
+                            .channel(channelName)
+                            .execute();
+                }
             }
-
-
         }
     }
 
