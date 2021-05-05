@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
 
-public abstract class DBSource {
+public class DBSource {
     private static BasicDataSource basicDS;
 
     static {

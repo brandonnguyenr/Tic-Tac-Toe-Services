@@ -7,7 +7,7 @@ import io.github.recorder.proj.utils.PreparedStatementWrapper;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DBManager extends DBSource {
+public class DBManager {
     private DBManager() {
         // empty
     }
@@ -24,8 +24,8 @@ public class DBManager extends DBSource {
         String sql = "INSERT INTO moves(gameid, playerid, x_coord, y_coord, time) VALUES(?, ?, ?, ?, ?);";
         boolean temp = false;
         try (
-                Connection connection = getDataSource().getConnection();
-                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, data.roomID, data.playerID, data.x, data.y, data.time) {
+                Connection connection = DBSource.getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, data.getRoomID(), data.getPlayerID(), data.getX(), data.getY(), data.getTime()) {
                     @Override
                     protected void prepareStatement(Object... params) throws SQLException {
                         stat.setString(1, (String) params[0]);
@@ -47,10 +47,10 @@ public class DBManager extends DBSource {
         String sql = "INSERT INTO game(starttime, endtime, player1id, player2id, startingplayerid, winningplayerid) VALUES(?, ?, ?, ?, ?);";
         boolean temp = false;
         try (
-                Connection connection = getDataSource().getConnection();
+                Connection connection = DBSource.getDataSource().getConnection();
                 PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
-                        data.startTime, data.endTime, data.player1.playerID,
-                        data.player2.playerID, data.startingPlayerID.playerID,data.winningPlayerID.playerID) {
+                        data.getStartTime(), data.getEndTime(), data.getPlayer1().getPlayerID(),
+                        data.getPlayer2().getPlayerID(), data.getStartingPlayerID().getPlayerID(),data.getWinningPlayerID().getPlayerID()) {
                     @Override
                     protected void prepareStatement(Object... params) throws SQLException {
                         stat.setString(1, (String) params[0]);

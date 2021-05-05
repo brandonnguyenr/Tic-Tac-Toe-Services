@@ -1,13 +1,18 @@
 package io.github.library.proj.messages;
 
-public class MoveData {
-    public int roomID;
-    public int playerID;
-    public int x;
-    public int y;
-    public long time;
+import lombok.Getter;
+import lombok.Setter;
 
-    public MoveData(int roomID, int playerID, int x, int y, long time) {
+@Getter
+@Setter
+public class MoveData {
+    private int roomID;
+    private String playerID; //UUID
+    private int x;
+    private int y;
+    private long time;
+
+    public MoveData(int roomID, String playerID, int x, int y, long time) {
         this.roomID = roomID;
         this.playerID = playerID;
         this.x = x;

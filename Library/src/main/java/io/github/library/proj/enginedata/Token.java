@@ -1,4 +1,4 @@
-package io.github.library.proj.messages;
+package io.github.library.proj.enginedata;
 
 /**
  * Enum used for the board tokens

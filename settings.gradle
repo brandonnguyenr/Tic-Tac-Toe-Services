@@ -1,4 +1,5 @@
 rootProject.name = 'tic-tac-toe-services'
 include 'Recorder'
 include 'Library'
+include 'GameEngine'
 

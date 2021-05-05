@@ -1,15 +1,19 @@
 package io.github.library.proj.messages;
 
 public enum Channels {
-    // authorization service
-    AUTHORIZATION("Authorization"),
-    CREATEACCOUNT("CreateAccount"),
-    DELETEACCOUNT("DeleteAccount"),
-    UPDATEACCOUNT("UpdateAccount"),
+    // authorization service messages
+    AUTHORIZATION("Authorization::"),
+    AUTHOR_CREATE(AUTHORIZATION.value + "Create"),
+    AUTHOR_VALIDATE(AUTHORIZATION.value + "Validate"),
 
-    //game engine
-    ROOM("Room"),
-    ROOM_MOVE("Room_Moves");
+    //game engine messages
+    ROOM("Room::"),
+    ROOM_REQUEST(ROOM.value + "Requests"),
+    ROOM_LIST(ROOM.value + "List"),
+    ROOM_MOVE(ROOM.value + "Move"),
+
+    //private messages
+    PRIVATE("Private::");
 
     private final String value;
 
