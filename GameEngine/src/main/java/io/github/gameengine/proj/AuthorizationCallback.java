@@ -12,26 +12,51 @@ import io.github.library.proj.messages.LoginResponseData;
 public class AuthorizationCallback implements ISubscribeCallback {
 
     @Override
-    public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
+    public void status(MessagingAPI mApi, MsgStatus status) {
 
     }
 
     @Override
-    public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
-        if (msgResultAPI.getChannel().equals(Channels.AUTHOR_VALIDATE.toString()) ||
-                msgResultAPI.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
-            LoginData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), LoginData.class);
+    public void resolved(MessagingAPI mApi, MsgResultAPI message) {
+        if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString()) ||
+                message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
+            LoginData data = GsonWrapper.fromJson(message.getMessage(), LoginData.class);
             try {
-                if (msgResultAPI.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {
-                    if (true) {     // TODO: database validation
-                        messagingAPI.publish()
-                                .message(GsonWrapper.toJson(new LoginResponseData(new LoginData(data.getUsername(), data.getFirstName(), data.getLastName()), true, null)))
-                                .channel(Channels.PRIVATE.toString())       // TODO: figure our logic here
+                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {
+                    if (false) {     // TODO: username and password validation { DB call }
+                        System.out.println("inside " + Channels.PRIVATE + message.getPublisherUuid());
+                        mApi.publish()
+                                .message(new LoginResponseData(data, true, null))
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                .execute();
+                    } else {
+                        mApi.publish()
+                                .message(new LoginResponseData(data, false, "Invalid username/password"))
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                .execute();
+                    }
+                } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
+                    if (false) {     // Todo: if doesnt already exists { DB call }
+                        // TODO: added user data to database { DB call }
+                        mApi.publish()
+                                .message(new LoginResponseData(data, true, null))
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                .execute();
+                    } else {
+                        mApi.publish()
+                                .message(new LoginResponseData(data, false, "user already exists"))
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 }
+
+
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
+                mApi.publish()
+                            .message(new LoginResponseData(data, false, "there was an error"))
+                            .channel(Channels.PRIVATE + message.getPublisherUuid())
+                            .execute();
             }
         }
     }

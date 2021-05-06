@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
@@ -21,3 +22,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+mainClassName = 'io.github.gameengine.proj.GameEngine'

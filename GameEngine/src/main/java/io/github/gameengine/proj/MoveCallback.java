@@ -54,14 +54,14 @@ public class MoveCallback implements ISubscribeCallback {
 
 
     @Override
-    public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
+    public void status(MessagingAPI mApi, MsgStatus status) {
 
     }
 
     @Override
-    public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
-        if (msgResultAPI.getChannel().equals(Channels.ROOM_MOVE.toString())) {
-            MoveData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), MoveData.class);
+    public void resolved(MessagingAPI mApi, MsgResultAPI message) {
+        if (message.getChannel().equals(Channels.ROOM_MOVE.toString())) {
+            MoveData data = GsonWrapper.fromJson(message.getMessage(), MoveData.class);
             int roomID = data.getRoomID();
             if (isValidMove(data)) {
                 Lobby lobby = lobbyList.get(roomID);
@@ -69,9 +69,10 @@ public class MoveCallback implements ISubscribeCallback {
                 lobby.getBoard().updateToken(data.getX(), data.getY(), token);
 
                 if (isWinner(lobby.getBoard(), token) || lobby.getBoard().isBoardFull()) {
-                    messagingAPI.publish()
-                            .message(GsonWrapper.toJson(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null)))
-                            .channel(lobby.getRoomData().getRoomChannel().toString()).execute();
+                    mApi.publish()
+                            .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null))
+                            .channel(lobby.getRoomData().getRoomChannel().toString())
+                            .execute();
                     lobby.endGame();
                 } else {
                     lobby.toggleCurrentPlayer();
@@ -82,8 +83,8 @@ public class MoveCallback implements ISubscribeCallback {
                         outGoingChannels.add(lobby.getRoomData().getPlayer2().getChannel());
 
                     for (var channelName : outGoingChannels) {
-                        messagingAPI.publish()
-                                .message(GsonWrapper.toJson(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), lobby.getCurrentPlayer())))
+                        mApi.publish()
+                                .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), lobby.getCurrentPlayer()))
                                 .channel(channelName)
                                 .execute();
                     }

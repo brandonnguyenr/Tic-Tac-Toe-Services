@@ -12,20 +12,20 @@ import io.github.library.proj.messages.RoomData;
 public class RecorderCallback implements ISubscribeCallback {
 
     @Override
-    public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
+    public void status(MessagingAPI mApi, MsgStatus status) {
 
     }
 
     @Override
-    public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
-        if (msgResultAPI.getChannel().equals(Channels.ROOM_MOVE.toString())) {
-            MoveData move = GsonWrapper.fromJson(msgResultAPI.getMessage(), MoveData.class);
+    public void resolved(MessagingAPI mApi, MsgResultAPI message) {
+        if (message.getChannel().equals(Channels.ROOM_MOVE.toString())) {
+            MoveData move = GsonWrapper.fromJson(message.getMessage(), MoveData.class);
 
             if (!DBManager.getInstance().writeMove(move)) {
                 System.out.println("error writing move");
             }
-        } else if (msgResultAPI.getChannel().equals(Channels.ROOM.toString())) {
-            RoomData room = GsonWrapper.fromJson(msgResultAPI.getMessage(), RoomData.class);
+        } else if (message.getChannel().equals(Channels.ROOM.toString())) {
+            RoomData room = GsonWrapper.fromJson(message.getMessage(), RoomData.class);
 
             if (!DBManager.getInstance().writeRoom(room)) {
                 System.out.println("error writing room");
