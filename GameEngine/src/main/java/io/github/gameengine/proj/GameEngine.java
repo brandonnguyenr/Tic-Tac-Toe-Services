@@ -15,7 +15,6 @@ public class GameEngine {
         try {
             api = new MessagingAPI();
             ac = new AuthorizationCallback();
-            System.out.println("in GameEngine: " + api.getUuid());
             api.subscribe()
                     .channels(Channels.AUTHOR_VALIDATE.toString(),
                               Channels.AUTHOR_CREATE.toString(),

@@ -24,7 +24,6 @@ public class AuthorizationCallback implements ISubscribeCallback {
             try {
                 if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {
                     if (false) {     // TODO: username and password validation { DB call }
-                        System.out.println("inside " + Channels.PRIVATE + message.getPublisherUuid());
                         mApi.publish()
                                 .message(new LoginResponseData(data, true, null))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
