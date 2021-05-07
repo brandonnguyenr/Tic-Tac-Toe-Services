@@ -21,10 +21,8 @@ public class DBManager extends DBSource{
         return InstanceHolder.INSTANCE;
     }
 
-    // TODO: see Recorder module for examples
-
     /**
-     * This method will be called from the switch statement within {@code Main.java} that will query the database to
+     * This method will be called from the {@code AuthorizationCallback.java} class that will query the database to
      * verify the password for the user. It will select a password from the database and check whether the entered password
      * and username was correct or not.
      * @param loginData: the data that contains all the details for login
@@ -58,10 +56,17 @@ public class DBManager extends DBSource{
     }
 
 
+    /**
+     * This method will be called from the {@code AuthorizationCallback.java} class that will query the database to
+     * create account for the client. It will update the database and store their username, firstname, lastname and password.
+     * @param createAccountData: the data that contains all the details for creating a new account
+     * @return a boolean value whether the account was successfully created or not
+     */
     public boolean createAccount(LoginData createAccountData) {
         String sql = "INSERT INTO users(username, firstname, lastname, password) VALUES(?, ?, ?, ?);";
         boolean result = false;
 
+        //trying to get the database connection
         try (
                 Connection connection = getDataSource().getConnection();
 
@@ -76,8 +81,13 @@ public class DBManager extends DBSource{
                     }
                 };
         ) {
-            if (stat.executeUpdate() != 0)
-                result = true;
+            //Throws a PSQLException for duplicate username
+            try {
+                if (stat.executeUpdate() != 0)
+                    result = true;
+            } catch (PSQLException e) {
+                //empty result = false
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
