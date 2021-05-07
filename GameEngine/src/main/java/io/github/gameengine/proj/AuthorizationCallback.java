@@ -36,6 +36,8 @@ public class AuthorizationCallback implements ISubscribeCallback {
                                 .execute();
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
+
+                    String sql = "INSERT INTO users(username, firstname, lastname, password) VALUES(?, ?, ?, ?);";
                     if (false) {     // Todo: if doesnt already exists { DB call }
                         // TODO: added user data to database { DB call }
                         mApi.publish()
