@@ -9,6 +9,9 @@ import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
+import io.github.gameengine.proj.utils.PreparedStatementWrapper;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class AuthorizationCallback implements ISubscribeCallback {
 
@@ -37,28 +40,51 @@ public class AuthorizationCallback implements ISubscribeCallback {
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
 
+                    String userName = "utsavp";
+                    String firstName = "utsav";
+                    String lastName = "parajuli";
+                    String password = "heyo";
+
+                    //trying to add to the database
                     String sql = "INSERT INTO users(username, firstname, lastname, password) VALUES(?, ?, ?, ?);";
-                    if (false) {     // Todo: if doesnt already exists { DB call }
-                        // TODO: added user data to database { DB call }
+                    boolean result = false;
+
+                    try (
+                            Connection connection = DBSource.getDataSource().getConnection();
+
+                            PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, userName, firstName,
+                                    lastName, password) {
+                                @Override
+                                protected void prepareStatement(Object... params) throws SQLException {
+                                    stat.setString(1, (String) params[0]);
+                                    stat.setString(2, (String) params[1]);
+                                    stat.setString(3, (String) params[2]);
+                                    stat.setString(4, (String) params[3]);
+                                }
+                            };
+                    ) {
+                        if (stat.executeUpdate() != 0) {     // Todo: if doesnt already exists { DB call }
+                            // TODO: added user data to database { DB call }
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, true, null))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        } else {
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, false, "user already exists"))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
                         mApi.publish()
-                                .message(new LoginResponseData(data, true, null))
-                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-                                .execute();
-                    } else {
-                        mApi.publish()
-                                .message(new LoginResponseData(data, false, "user already exists"))
+                                .message(new LoginResponseData(data, false, "there was an error"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
-                mApi.publish()
-                            .message(new LoginResponseData(data, false, "there was an error"))
-                            .channel(Channels.PRIVATE + message.getPublisherUuid())
-                            .execute();
             }
         }
     }
