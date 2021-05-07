@@ -1,7 +1,7 @@
 package io.github.recorder.proj;
 
 import io.github.API.MessagingAPI;
-import io.github.library.proj.messages.Channels;
+import io.github.coreutils.proj.messages.Channels;
 
 import java.io.IOException;
 

@@ -1,13 +1,14 @@
 package io.github.gameengine.proj;
 
+
 import io.github.API.ISubscribeCallback;
 import io.github.API.MessagingAPI;
 import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
-import io.github.library.proj.messages.Channels;
-import io.github.library.proj.messages.LoginData;
-import io.github.library.proj.messages.LoginResponseData;
+import io.github.coreutils.proj.messages.Channels;
+import io.github.coreutils.proj.messages.LoginData;
+import io.github.coreutils.proj.messages.LoginResponseData;
 
 public class AuthorizationCallback implements ISubscribeCallback {
 

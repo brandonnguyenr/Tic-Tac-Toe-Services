@@ -1,7 +1,7 @@
 package io.github.recorder.proj;
 
-import io.github.library.proj.messages.MoveData;
-import io.github.library.proj.messages.RoomData;
+import io.github.coreutils.proj.messages.MoveData;
+import io.github.coreutils.proj.messages.RoomData;
 import io.github.recorder.proj.utils.PreparedStatementWrapper;
 
 import java.sql.Connection;

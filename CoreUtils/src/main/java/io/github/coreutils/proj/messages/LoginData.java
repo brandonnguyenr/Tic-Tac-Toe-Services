@@ -1,4 +1,4 @@
-package io.github.library.proj.messages;
+package io.github.coreutils.proj.messages;
 
 import lombok.Getter;
 import lombok.Setter;

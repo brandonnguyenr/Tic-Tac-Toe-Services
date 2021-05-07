@@ -1,6 +1,6 @@
-package io.github.library.proj.messages;
+package io.github.coreutils.proj.messages;
 
-import io.github.library.proj.enginedata.Token;
+import io.github.coreutils.proj.enginedata.Token;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

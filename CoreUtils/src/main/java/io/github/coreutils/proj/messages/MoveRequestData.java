@@ -1,6 +1,6 @@
-package io.github.library.proj.messages;
+package io.github.coreutils.proj.messages;
 
-import io.github.library.proj.enginedata.Board;
+import io.github.coreutils.proj.enginedata.Board;
 import lombok.Getter;
 
 @Getter

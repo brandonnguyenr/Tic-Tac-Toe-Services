@@ -1,6 +1,6 @@
-package io.github.library.proj.enginedata;
+package io.github.coreutils.proj.enginedata;
 
-import io.github.library.proj.messages.RoomData;
+import io.github.coreutils.proj.messages.RoomData;
 
 public class Lobby {
     private final RoomData roomData;

@@ -1,4 +1,4 @@
-package io.github.library.proj.messages;
+package io.github.coreutils.proj.messages;
 
 public enum Channels {
     // authorization service messages

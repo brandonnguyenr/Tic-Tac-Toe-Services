@@ -1,6 +1,4 @@
-package io.github.library.proj.enginedata;
-
-import static io.github.library.proj.enginedata.Token.*;
+package io.github.coreutils.proj.enginedata;
 
 
 import java.util.Arrays;
@@ -20,7 +18,7 @@ public class Board {
      * Constructs a Board object by setting all values of Token[][] board to BLANK.
      */
     public Board() {
-        Arrays.stream(board).forEach(str -> Arrays.fill(str, BLANK));
+        Arrays.stream(board).forEach(str -> Arrays.fill(str, Token.BLANK));
     }
 
     /**
@@ -70,7 +68,7 @@ public class Board {
         for (Token[] row : board) {
             for (Token col : row) {
                 // does cell have a valid token? If not, board isn't empty
-                if (col == BLANK)
+                if (col == Token.BLANK)
                     return false;
             }
         }
@@ -82,7 +80,7 @@ public class Board {
      * Sets all values within Token[][] board to BLANK.
      */
     public void clearBoard() {
-        for (Token[] row: board) Arrays.fill(row, BLANK);
+        for (Token[] row: board) Arrays.fill(row, Token.BLANK);
     }
 
     /**

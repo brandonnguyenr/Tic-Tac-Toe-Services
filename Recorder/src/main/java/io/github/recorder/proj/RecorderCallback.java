@@ -5,9 +5,9 @@ import io.github.API.MessagingAPI;
 import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
-import io.github.library.proj.messages.Channels;
-import io.github.library.proj.messages.MoveData;
-import io.github.library.proj.messages.RoomData;
+import io.github.coreutils.proj.messages.Channels;
+import io.github.coreutils.proj.messages.MoveData;
+import io.github.coreutils.proj.messages.RoomData;
 
 public class RecorderCallback implements ISubscribeCallback {
 
