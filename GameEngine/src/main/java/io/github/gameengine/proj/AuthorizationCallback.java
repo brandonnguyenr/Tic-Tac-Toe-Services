@@ -9,11 +9,8 @@ import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
-import io.github.gameengine.proj.utils.PreparedStatementWrapper;
-import java.sql.Connection;
-import java.sql.SQLException;
 
-public class AuthorizationCallback implements ISubscribeCallback {
+public class AuthorizationCallback extends DBSource implements ISubscribeCallback{
 
     @Override
     public void status(MessagingAPI mApi, MsgStatus status) {
@@ -45,28 +42,33 @@ public class AuthorizationCallback implements ISubscribeCallback {
                     String lastName = "parajuli";
                     String password = "heyo";
 
+                    System.out.println("1");
                     //trying to add to the database
                     String sql = "INSERT INTO users(username, firstname, lastname, password) VALUES(?, ?, ?, ?);";
                     boolean result = false;
 
-                    try (
-                            Connection connection = DBSource.getDataSource().getConnection();
+                    System.out.println("2");
 
-                            PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, userName, firstName,
-                                    lastName, password) {
-                                @Override
-                                protected void prepareStatement(Object... params) throws SQLException {
-                                    stat.setString(1, (String) params[0]);
-                                    stat.setString(2, (String) params[1]);
-                                    stat.setString(3, (String) params[2]);
-                                    stat.setString(4, (String) params[3]);
-                                }
-                            };
-                    ) {
-                        if (stat.executeUpdate() != 0) {     // Todo: if doesnt already exists { DB call }
+                    System.out.println(getDataSource().getConnection().toString());
+//                    try (
+//                            Connection connection = getDataSource().getConnection();
+//
+//                            PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, userName, firstName,
+//                                    lastName, password) {
+//                                @Override
+//                                protected void prepareStatement(Object... params) throws SQLException {
+//                                    stat.setString(1, (String) params[0]);
+//                                    stat.setString(2, (String) params[1]);
+//                                    stat.setString(3, (String) params[2]);
+//                                    stat.setString(4, (String) params[3]);
+//                                }
+//                            };
+//                    ) {
+                    //stat.executeUpdate() != 0
+                        if (false) {     // Todo: if doesnt already exists { DB call }
                             // TODO: added user data to database { DB call }
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, null))
+                                    .message(new LoginResponseData(data, true, "null"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         } else {
@@ -75,13 +77,13 @@ public class AuthorizationCallback implements ISubscribeCallback {
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        mApi.publish()
-                                .message(new LoginResponseData(data, false, "there was an error"))
-                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-                                .execute();
-                    }
+//                } catch (Exception e) {
+//                        e.printStackTrace();
+//                        mApi.publish()
+//                                .message(new LoginResponseData(data, false, "there was an error"))
+//                                .channel(Channels.PRIVATE + message.getPublisherUuid())
+//                                .execute();
+//                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
