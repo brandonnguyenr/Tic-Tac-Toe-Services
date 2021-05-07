@@ -10,7 +10,9 @@ import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
 
-public class AuthorizationCallback extends DBSource implements ISubscribeCallback{
+import java.sql.SQLException;
+
+public class AuthorizationCallback implements ISubscribeCallback{
 
     @Override
     public void status(MessagingAPI mApi, MsgStatus status) {
@@ -37,36 +39,12 @@ public class AuthorizationCallback extends DBSource implements ISubscribeCallbac
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
 
-                    String userName = "utsavp";
-                    String firstName = "utsav";
-                    String lastName = "parajuli";
-                    String password = "heyo";
+//                    String userName = "utsavp";
+//                    String firstName = "utsav";
+//                    String lastName = "parajuli";
+//                    String password = "heyo";
 
-                    System.out.println("1");
-                    //trying to add to the database
-                    String sql = "INSERT INTO users(username, firstname, lastname, password) VALUES(?, ?, ?, ?);";
-                    boolean result = false;
-
-                    System.out.println("2");
-
-                    System.out.println(getDataSource().getConnection().toString());
-//                    try (
-//                            Connection connection = getDataSource().getConnection();
-//
-//                            PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, userName, firstName,
-//                                    lastName, password) {
-//                                @Override
-//                                protected void prepareStatement(Object... params) throws SQLException {
-//                                    stat.setString(1, (String) params[0]);
-//                                    stat.setString(2, (String) params[1]);
-//                                    stat.setString(3, (String) params[2]);
-//                                    stat.setString(4, (String) params[3]);
-//                                }
-//                            };
-//                    ) {
-                    //stat.executeUpdate() != 0
-                        if (false) {     // Todo: if doesnt already exists { DB call }
-                            // TODO: added user data to database { DB call }
+                    if (DBManager.getInstance().createAccount(data)) {
                             mApi.publish()
                                     .message(new LoginResponseData(data, true, "null"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
@@ -77,13 +55,6 @@ public class AuthorizationCallback extends DBSource implements ISubscribeCallbac
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }
-//                } catch (Exception e) {
-//                        e.printStackTrace();
-//                        mApi.publish()
-//                                .message(new LoginResponseData(data, false, "there was an error"))
-//                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-//                                .execute();
-//                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
