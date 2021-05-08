@@ -41,24 +41,24 @@ public class AuthorizationCallback implements ISubscribeCallback{
                 if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {     //Checking if validating login
                     if (DBManager.getInstance().verifyLogin(data)) {       //checking if login is correct
                         mApi.publish()
-                                .message(new LoginResponseData(data, true, null))
+                                .message(new LoginResponseData(data, true, "Validate"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     } else {                                                //login unsuccessful
                         mApi.publish()
-                                .message(new LoginResponseData(data, false, "Invalid username/password"))
+                                .message(new LoginResponseData(data, false, "Validate"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {    //Checking if create account
                     if (DBManager.getInstance().createAccount(data)) {      //account created successfully
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, null))
+                                    .message(new LoginResponseData(data, true, "Create"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         } else {                                            //account already exists
                             mApi.publish()
-                                    .message(new LoginResponseData(data, false, "User already exists"))
+                                    .message(new LoginResponseData(data, false, "Create"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }
