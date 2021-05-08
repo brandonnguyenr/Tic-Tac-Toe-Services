@@ -43,14 +43,12 @@ public class DBManager extends DBSource{
                 };
                 ResultSet rs2 = stat.executeQuery();
         ) {
-            if (rs2.first())
-                temp = true;
-            //we retrieve the password from the data we received back
-//            while(rs2.next())
-//            {
-//                if (rs2.getString("password").equals(loginData.getPassword()))
-//                    temp = true;
-//            }
+ //           we retrieve the password from the data we received back
+            while(rs2.next())
+            {
+                if (rs2.getString("password").equals(loginData.getPassword()))
+                    temp = true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
