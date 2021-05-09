@@ -4,6 +4,7 @@ import io.github.API.ISubscribeCallback;
 import io.github.API.MessagingAPI;
 import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
+import io.github.API.messagedata.MsgStatusCategory;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.RoomData;
 
@@ -18,16 +19,24 @@ public class RoomsCallback implements ISubscribeCallback {
 
     @Override
     public void status(MessagingAPI mApi, MsgStatus status) {
-
+        if (status.getCategory().equals(MsgStatusCategory.MsgConnectedCategory)) {
+            mApi.publish()
+                    .message(roomDataList.toArray())
+                    .channel(Channels.ROOM_LIST.toString())
+                    .execute();
+        }
     }
+
 
     @Override
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {
         if (message.getChannel().equals(Channels.ROOM_LIST.toString())) {
-            mApi.publish()
-                    .message(roomDataList.toArray())
-                    .channel(Channels.ROOM.toString())
-                    .execute();
+            if (!message.getPublisherUuid().equals(mApi.getUuid())) {
+                mApi.publish()
+                        .message(roomDataList.toArray())
+                        .channel(Channels.ROOM_LIST.toString())
+                        .execute();
+            }
         }
     }
 
