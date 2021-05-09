@@ -1,5 +1,7 @@
 package io.github.gameengine.proj.utils;
 
+import org.postgresql.util.PSQLException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

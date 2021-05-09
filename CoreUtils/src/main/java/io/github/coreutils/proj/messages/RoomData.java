@@ -18,7 +18,7 @@ public class RoomData {
     private PlayerData player2 = null;
 
     private int roomID = -1;
-    private Channels roomChannel = null;
+    private String roomChannel = null;
     private RequestType requestType = RequestType.NORMAL;
 
     private long startTime;
@@ -70,7 +70,7 @@ public class RoomData {
                 getEndTime() == roomData.getEndTime() &&
                 Objects.equals(getPlayer1(), roomData.getPlayer1()) &&
                 Objects.equals(getPlayer2(), roomData.getPlayer2()) &&
-                getRoomChannel() == roomData.getRoomChannel() &&
+                getRoomChannel().equals(roomData.getRoomChannel()) &&
                 getRequestType() == roomData.getRequestType() &&
                 Objects.equals(getStartingPlayerID(), roomData.getStartingPlayerID()) &&
                 Objects.equals(getWinningPlayerID(), roomData.getWinningPlayerID());

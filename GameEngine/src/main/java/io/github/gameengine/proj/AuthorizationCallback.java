@@ -10,53 +10,61 @@ import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
 
-public class AuthorizationCallback implements ISubscribeCallback {
+/**
+ * Callback class for the authorization service. This class will get the message from the API and make corresponding
+ * method calls with the database through the server
+ * @author Utsav Parajuli
+ */
+public class AuthorizationCallback implements ISubscribeCallback{
 
     @Override
     public void status(MessagingAPI mApi, MsgStatus status) {
 
     }
 
+
+    /**
+     * In this method we will get the what channel the API wants to go to. After we get the message sent by the client
+     * API and make a LoginData variable that will contain the full scale data of the message sent by client. We
+     * check if the message was sent to the authorization channel or the login validation and check with the database
+     * through the {@DBManager class. We then send back the appropriate message back to the client.
+     * @param mApi
+     * @param message
+     */
     @Override
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {
         if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString()) ||
                 message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
             LoginData data = GsonWrapper.fromJson(message.getMessage(), LoginData.class);
+
             try {
-                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {
-                    if (false) {     // TODO: username and password validation { DB call }
+                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {     //Checking if validating login
+                    if (DBManager.getInstance().verifyLogin(data)) {       //checking if login is correct
                         mApi.publish()
-                                .message(new LoginResponseData(data, true, null))
+                                .message(new LoginResponseData(data, true, "Validate"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
-                    } else {
+                    } else {                                                //login unsuccessful
                         mApi.publish()
-                                .message(new LoginResponseData(data, false, "Invalid username/password"))
-                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-                                .execute();
-                    }
-                } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
-                    if (false) {     // Todo: if doesnt already exists { DB call }
-                        // TODO: added user data to database { DB call }
-                        mApi.publish()
-                                .message(new LoginResponseData(data, true, null))
-                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-                                .execute();
-                    } else {
-                        mApi.publish()
-                                .message(new LoginResponseData(data, false, "user already exists"))
+                                .message(new LoginResponseData(data, false, "Validate"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
+                } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {    //Checking if create account
+                    if (DBManager.getInstance().createAccount(data)) {      //account created successfully
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, true, "Create"))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        } else {                                            //account already exists
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, false, "Create"))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        }
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
-                mApi.publish()
-                            .message(new LoginResponseData(data, false, "there was an error"))
-                            .channel(Channels.PRIVATE + message.getPublisherUuid())
-                            .execute();
             }
         }
     }

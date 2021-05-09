@@ -8,8 +8,10 @@ import java.io.IOException;
 public class GameEngine {
     private MessagingAPI api;
     private AuthorizationCallback ac;
-    private  MoveCallback mc;
+    private MoveCallback mc;
     private RoomsCallback rc;
+    private GamesCallback gc;
+    private static int gameID = 1;
 
     public GameEngine() {
         try {
@@ -32,5 +34,9 @@ public class GameEngine {
 
     public static void main(String[] args) {
         new GameEngine();
+    }
+
+    public static int getGameID() {
+        return gameID++;
     }
 }
