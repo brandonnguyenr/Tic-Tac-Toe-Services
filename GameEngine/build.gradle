@@ -15,7 +15,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
     implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
-    implementation files('../libs/MessagingAPI-1.0-SNAPSHOT.jar')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(":CoreUtils")
 }
 

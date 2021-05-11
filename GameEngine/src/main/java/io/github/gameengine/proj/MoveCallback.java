@@ -6,7 +6,7 @@ import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.enginedata.Board;
-import io.github.coreutils.proj.enginedata.Lobby;
+import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.enginedata.Token;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.MoveData;

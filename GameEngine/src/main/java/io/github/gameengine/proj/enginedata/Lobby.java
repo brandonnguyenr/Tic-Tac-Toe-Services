@@ -1,5 +1,6 @@
-package io.github.coreutils.proj.enginedata;
+package io.github.gameengine.proj.enginedata;
 
+import io.github.coreutils.proj.enginedata.Board;
 import io.github.coreutils.proj.messages.RoomData;
 
 public class Lobby {

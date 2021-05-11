@@ -7,27 +7,29 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class DBSource {
-    private static BasicDataSource basicDS;
+    private static BasicDataSource dataSource;
 
     static {
         try {
-            basicDS = new BasicDataSource();
+            dataSource = new BasicDataSource();
             Properties properties = new Properties();
             // Loading properties file
             properties.load(DBSource.class.getResourceAsStream("db.properties"));
-            basicDS.setDriverClassName(properties.getProperty("DRIVER_CLASS")); //loads the jdbc driver
-            basicDS.setUrl(properties.getProperty("DB_CONNECTION_URL"));
-            basicDS.setUsername(properties.getProperty("DB_USER"));
-            basicDS.setPassword(properties.getProperty("DB_PWD"));
+            dataSource.setDriverClassName(properties.getProperty("DRIVER_CLASS")); //loads the jdbc driver
+            dataSource.setUrl(properties.getProperty("DB_CONNECTION_URL"));
+            dataSource.setUsername(properties.getProperty("DB_USER"));
+            dataSource.setPassword(properties.getProperty("DB_PWD"));
             // Parameters for connection pooling
-            basicDS.setInitialSize(10);
-            basicDS.setMaxTotal(10);
+//            basicDS.setInitialSize(10);
+            dataSource.setMinIdle(1);
+            dataSource.setMaxIdle(6);
+            dataSource.setMaxTotal(10);
         }catch(IOException e) {
             e.printStackTrace();
         }
     }
 
     public static DataSource getDataSource() {
-        return basicDS;
+        return dataSource;
     }
 }
