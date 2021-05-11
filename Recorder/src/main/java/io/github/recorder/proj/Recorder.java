@@ -10,16 +10,14 @@ public class Recorder {
     private RecorderCallback callback;
 
     public Recorder() {
-        try {
-            api = new MessagingAPI();
-            callback = new RecorderCallback();
+        api = new MessagingAPI();
+        callback = new RecorderCallback();
 
-            api.subscribe().channels(Channels.ROOM_MOVE.toString(), Channels.ROOM.toString()).execute();
-            api.addEventListener(callback, Channels.ROOM_MOVE.toString(), Channels.ROOM.toString());
-        } catch (IOException e) {
-            api.free();
-            System.out.println(e.getMessage());
-        }
+        api.subscribe().channels(Channels.ROOM_MOVE.toString(), Channels.ROOM.toString()).execute();
+        api.addEventListener(callback, Channels.ROOM_MOVE.toString(), Channels.ROOM.toString());
+        api.onclose(() -> {
+            System.out.println("api is now dead..");
+        });
     }
 
     public static void main(String[] args) {
