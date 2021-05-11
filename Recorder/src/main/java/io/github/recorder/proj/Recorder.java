@@ -3,8 +3,6 @@ package io.github.recorder.proj;
 import io.github.API.MessagingAPI;
 import io.github.coreutils.proj.messages.Channels;
 
-import java.io.IOException;
-
 public class Recorder {
     private MessagingAPI api;
     private RecorderCallback callback;
