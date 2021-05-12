@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
 }
 
 group 'org.example'
@@ -14,8 +14,24 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    api fileTree(include: ['*.jar'], dir: 'libs')
 }
 
 test {
     useJUnitPlatform()
+}
+sourceSets {
+    main {
+        output.setResourcesDir(java.outputDir)
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'CoreUtils'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

@@ -15,7 +15,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
     implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(":CoreUtils")
 }
 
@@ -24,3 +23,19 @@ test {
 }
 
 mainClassName = 'io.github.gameengine.proj.GameEngine'
+
+sourceSets {
+    main {
+        output.setResourcesDir(java.outputDir)
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
