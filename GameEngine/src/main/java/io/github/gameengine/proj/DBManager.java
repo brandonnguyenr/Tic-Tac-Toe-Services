@@ -178,8 +178,13 @@ public class DBManager extends DBSource{
                     }
                 };
         ) {
-            if (stat.executeUpdate() != 0)
-                temp = true;
+            //Throws a PSQLException for duplicate username
+            try {
+                if (stat.executeUpdate() != 0)
+                    temp = true;
+            } catch (PSQLException e) {
+                //temp is false
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
