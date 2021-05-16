@@ -8,6 +8,7 @@ import org.postgresql.util.PSQLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class DBManager extends DBSource{
     private DBManager() {
@@ -117,7 +118,8 @@ public class DBManager extends DBSource{
                     }
                 };
         ) {
-            if (stat.executeUpdate() != 0) temp = true;
+            if (stat.executeUpdate() != 0)
+                temp = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,7 +149,8 @@ public class DBManager extends DBSource{
                     }
                 };
         ) {
-            if (stat.executeUpdate() != 0) temp = true;
+            if (stat.executeUpdate() != 0)
+                temp = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,7 +178,8 @@ public class DBManager extends DBSource{
                     }
                 };
         ) {
-            if (stat.executeUpdate() != 0) temp = true;
+            if (stat.executeUpdate() != 0)
+                temp = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
