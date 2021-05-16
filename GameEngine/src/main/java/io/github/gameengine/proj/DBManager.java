@@ -123,4 +123,62 @@ public class DBManager extends DBSource{
         }
         return temp;
     }
+
+
+    /**
+     * This method will update the personal info of the particular user specified with the username.
+     * @param updatePersonalData: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
+    public boolean updatePersonalInfo (UpdateData updatePersonalData) {
+        String sql = "UPDATE users SET firstname = ?, lastname = ? WHERE username = ?;";
+        boolean temp = false;
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
+                        updatePersonalData.getFirstName(), updatePersonalData.getLastName(),
+                        updatePersonalData.getUsername()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setString(1, (String) params[0]);
+                        stat.setString(2, (String) params[1]);
+                        stat.setString(3, (String) params[2]);
+                    }
+                };
+        ) {
+            if (stat.executeUpdate() != 0) temp = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+
+    /**
+     * This method will update the personal info of the particular user specified with the username.
+     * @param updateUsername: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
+    public boolean updateUsername (UpdateData updateUsername) {
+        String sql = "UPDATE users SET username = ? WHERE username = ?;";
+        boolean temp = false;
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
+                        updateUsername.getNewUsername(), updateUsername.getUsername()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setString(1, (String) params[0]);
+                        stat.setString(2, (String) params[1]);
+                    }
+                };
+        ) {
+            if (stat.executeUpdate() != 0) temp = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
 }
