@@ -6,6 +6,12 @@ public enum Channels {
     AUTHOR_CREATE(AUTHORIZATION.value + "Create"),
     AUTHOR_VALIDATE(AUTHORIZATION.value + "Validate"),
 
+    // update account messages
+    UPDATE("Update::"),
+    UPDATE_USERNAME(UPDATE.value + "Username"),
+    UPDATE_PERSONAL_INFO(UPDATE.value + "Personal Info"),
+    UPDATE_PASSWORD(UPDATE.value + "Password"),
+
     //game engine messages
     ROOM("Room::"),
     ROOM_REQUEST(ROOM.value + "Requests"),
