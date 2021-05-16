@@ -156,7 +156,7 @@ public class DBManager extends DBSource{
 
 
     /**
-     * This method will update the personal info of the particular user specified with the username.
+     * This method will update the username of the particular user specified with the username.
      * @param updateUsername: The class that contains all the data to update
      * @return a boolean representation of the request whether it was successful or not
      * @author Utsav Parajuli
