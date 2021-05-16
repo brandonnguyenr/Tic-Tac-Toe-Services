@@ -10,7 +10,6 @@ import io.github.coreutils.proj.messages.*;
 public class UpdatesCallback implements ISubscribeCallback {
     @Override
     public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
-
     }
 
     @Override
@@ -18,11 +17,12 @@ public class UpdatesCallback implements ISubscribeCallback {
         if (msgResultAPI.getChannel().equals(Channels.UPDATE_USERNAME.toString()) ||
                 msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString()) ||
                 msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString())) {
+
             UpdateData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), UpdateData.class);
 
             try {
                 if (msgResultAPI.getChannel().equals(Channels.UPDATE_USERNAME.toString())) {     //Checking if updating username
-                    if (DBManager.getInstance().updateUsername(data)) {       //checking if login is correct
+                    if (DBManager.getInstance().updateUsername(data)) {//checking if login is correct
                         messagingAPI.publish()
                                 .message(new UpdateResponseData(data, true, "Username"))
                                 .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
@@ -33,7 +33,7 @@ public class UpdatesCallback implements ISubscribeCallback {
                                 .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
                                 .execute();
                     }
-                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString())) {     //Checking if updating username
+                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString())) {//Checking if updating username
                     if (DBManager.getInstance().updatePersonalInfo(data)) {       //checking if login is correct
                         messagingAPI.publish()
                                 .message(new UpdateResponseData(data, true, "PersonalInfo"))
