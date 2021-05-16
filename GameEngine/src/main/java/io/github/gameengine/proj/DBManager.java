@@ -1,6 +1,7 @@
 package io.github.gameengine.proj;
 
 import io.github.coreutils.proj.messages.LoginData;
+import io.github.coreutils.proj.messages.UpdateData;
 import io.github.gameengine.proj.utils.PreparedStatementWrapper;
 import org.postgresql.util.PSQLException;
 
@@ -92,5 +93,34 @@ public class DBManager extends DBSource{
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * This method will update the password of the particular user specified with the username.
+     * @param updatePasswordData: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
+    public boolean updatePassword (UpdateData updatePasswordData) {
+        String sql = "UPDATE users SET password = ? WHERE username = ? AND password = ?;";
+        boolean temp = false;
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
+                        updatePasswordData.getNewPassword(), updatePasswordData.getUsername(),
+                        updatePasswordData.getPassword()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setString(1, (String) params[0]);
+                        stat.setString(2, (String) params[1]);
+                        stat.setString(3, (String) params[2]);
+                    }
+                };
+        ) {
+            if (stat.executeUpdate() != 0) temp = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
     }
 }
