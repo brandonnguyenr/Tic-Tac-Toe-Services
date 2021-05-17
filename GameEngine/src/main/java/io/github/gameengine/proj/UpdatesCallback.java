@@ -10,7 +10,6 @@ import io.github.coreutils.proj.messages.*;
 public class UpdatesCallback implements ISubscribeCallback {
     @Override
     public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
-
     }
 
     @Override
@@ -64,9 +63,6 @@ public class UpdatesCallback implements ISubscribeCallback {
             }
         }
     }
-
-
-
 
     @Override
     public void rejected(Exception e) {
