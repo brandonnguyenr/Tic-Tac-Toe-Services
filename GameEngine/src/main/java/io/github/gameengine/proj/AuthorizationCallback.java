@@ -27,7 +27,7 @@ public class AuthorizationCallback implements ISubscribeCallback{
      * In this method we will get the what channel the API wants to go to. After we get the message sent by the client
      * API and make a LoginData variable that will contain the full scale data of the message sent by client. We
      * check if the message was sent to the authorization channel or the login validation and check with the database
-     * through the {@DBManager class. We then send back the appropriate message back to the client.
+     * through the {@link DBManager}. We then send back the appropriate message back to the client.
      * @param mApi
      * @param message
      */
