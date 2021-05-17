@@ -28,8 +28,9 @@ public class AuthorizationCallback implements ISubscribeCallback{
      * API and make a LoginData variable that will contain the full scale data of the message sent by client. We
      * check if the message was sent to the authorization channel or the login validation and check with the database
      * through the {@link DBManager}. We then send back the appropriate message back to the client.
-     * @param mApi
-     * @param message
+     * @param mApi : messaging API
+     * @param message: result
+     * @author Utsav Parajuli
      */
     @Override
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {

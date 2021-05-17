@@ -29,6 +29,7 @@ public class DBManager extends DBSource{
      * and username was correct or not.
      * @param loginData: the data that contains all the details for login
      * @return a boolean value whether the password was true or not
+     * @author Utsav Parajuli
      */
     public boolean verifyLogin (LoginData loginData) {
         String sql = "SELECT password FROM users WHERE username = ? AND password = ?;";
@@ -63,6 +64,7 @@ public class DBManager extends DBSource{
      * create account for the client. It will update the database and store their username, firstname, lastname and password.
      * @param createAccountData: the data that contains all the details for creating a new account
      * @return a boolean value whether the account was successfully created or not
+     * @author Utsav Parajuli
      */
     public boolean createAccount(LoginData createAccountData) {
         String sql = "INSERT INTO users(username, firstname, lastname, password) VALUES(?, ?, ?, ?);";
