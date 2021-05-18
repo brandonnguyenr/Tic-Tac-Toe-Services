@@ -9,20 +9,28 @@ public class GameEngine {
     private MoveCallback mc;
     private RoomsCallback rc;
     private GamesCallback gc;
+    private UpdatesCallback uc;
     private static int gameID = 1;
 
     public GameEngine() {
         api = new MessagingAPI();
         ac = new AuthorizationCallback();
+        uc = new UpdatesCallback();
         api.subscribe()
                 .channels(Channels.AUTHOR_VALIDATE.toString(),
                         Channels.AUTHOR_CREATE.toString(),
+                        Channels.UPDATE_USERNAME.toString(),
+                        Channels.UPDATE_PERSONAL_INFO.toString(),
+                        Channels.UPDATE_PASSWORD.toString(),
                         Channels.ROOM_REQUEST.toString(),
                         Channels.ROOM_MOVE.toString(),
                         Channels.ROOM_LIST.toString())
                 .execute();
 
         api.addEventListener(ac, Channels.AUTHOR_VALIDATE.toString(), Channels.AUTHOR_CREATE.toString());
+
+        api.addEventListener(uc, Channels.UPDATE_USERNAME.toString(), Channels.UPDATE_PERSONAL_INFO.toString(),
+                Channels.UPDATE_PASSWORD.toString());
 
         api.onclose(() -> {
             System.out.println("api is now dead..");
