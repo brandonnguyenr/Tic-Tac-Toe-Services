@@ -208,7 +208,7 @@ public class DBManager extends DBSource{
                         updateDeleted.isDeleted(), updateDeleted.getUsername()) {
                     @Override
                     protected void prepareStatement(Object... params) throws SQLException {
-                        stat.setString(1, (String) params[0]);
+                        stat.setBoolean(1, (boolean) params[0]);
                         stat.setString(2, (String) params[1]);
                     }
                 };
