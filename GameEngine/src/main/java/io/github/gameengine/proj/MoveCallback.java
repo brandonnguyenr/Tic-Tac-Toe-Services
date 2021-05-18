@@ -6,6 +6,7 @@ import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.enginedata.Board;
+import io.github.coreutils.proj.messages.RoomData;
 import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.enginedata.Token;
 import io.github.coreutils.proj.messages.Channels;
@@ -28,7 +29,7 @@ public class MoveCallback implements ISubscribeCallback {
         int roomID = data.getRoomID();
         if (lobbyList.containsKey(roomID)) {
             lobby = lobbyList.get(roomID);
-            return lobby.isRunning() && lobby.getCurrentPlayer().equals(data.getPlayerUserName());
+            return lobby.isRunning() && lobby.getCurrentPlayer().equals(data.getPlayerID());
         }
         return false;
     }
@@ -65,25 +66,26 @@ public class MoveCallback implements ISubscribeCallback {
             int roomID = data.getRoomID();
             if (isValidMove(data)) {
                 Lobby lobby = lobbyList.get(roomID);
-                Token token = (data.getPlayerUserName().equals(lobby.getRoomData().getPlayer1().getPlayerUserName())) ? Token.X : Token.O;
+                Token token = (data.getPlayerID().equals(lobby.getRoomData().getPlayer1().getPlayerUserName())) ? Token.X : Token.O;
                 lobby.getBoard().updateToken(data.getX(), data.getY(), token);
 
-                if (isWinner(lobby.getBoard(), token)) {
+                //  someone won                       or        the game is a tie
+                if (isWinner(lobby.getBoard(), token) || lobby.getBoard().isBoardFull()) {
                     mApi.publish()
-                            .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null, token))
-                            .channel(lobby.getRoomData().getRoomChannel())
+                            .message(lobby.getRoomData())
+                            .channel(Channels.ROOM.toString())
                             .execute();
-                    lobby.endGame();
-                } else if (lobby.getBoard().isBoardFull()) {
+
                     mApi.publish()
                             .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null))
-                            .channel(lobby.getRoomData().getRoomChannel())
+                            .channel(lobby.getRoomData().getRoomChannel().toString())
                             .execute();
                     lobby.endGame();
                 } else {
                     lobby.toggleCurrentPlayer();
+
                     List<String> outGoingChannels = new LinkedList<>();
-                    outGoingChannels.add(lobby.getRoomData().getRoomChannel());
+                    outGoingChannels.add(lobby.getRoomData().getRoomChannel().toString());
                     if (lobby.getRoomData().getPlayer2().isAI())
                         outGoingChannels.add(lobby.getRoomData().getPlayer2().getChannel());
 
