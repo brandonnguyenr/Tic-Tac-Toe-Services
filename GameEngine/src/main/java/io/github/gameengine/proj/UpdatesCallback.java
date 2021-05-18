@@ -26,7 +26,8 @@ public class UpdatesCallback implements ISubscribeCallback {
     public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
         if (msgResultAPI.getChannel().equals(Channels.UPDATE_USERNAME.toString()) ||
                 msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString()) ||
-                msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString())) {
+                msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString()) ||
+                msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {
 
             UpdateData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), UpdateData.class);
 
