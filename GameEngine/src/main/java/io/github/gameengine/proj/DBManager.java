@@ -192,4 +192,32 @@ public class DBManager extends DBSource{
         }
         return temp;
     }
+
+    /**
+     * This method will update the account deletion status of the particular user specified with the username.
+     * @param updateDeleted: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
+    public boolean updateIsDeleted (UpdateData updateDeleted) {
+        String sql = "UPDATE users SET isDeleted = ? WHERE username = ?;";
+        boolean temp = false;
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
+                        updateDeleted.isDeleted(), updateDeleted.getUsername()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setString(1, (String) params[0]);
+                        stat.setString(2, (String) params[1]);
+                    }
+                };
+        ) {
+            if (stat.executeUpdate() != 0)
+                temp = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
 }

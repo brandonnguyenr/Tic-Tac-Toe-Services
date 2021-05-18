@@ -11,6 +11,7 @@ public enum Channels {
     UPDATE_USERNAME(UPDATE.value + "Username"),
     UPDATE_PERSONAL_INFO(UPDATE.value + "Personal Info"),
     UPDATE_PASSWORD(UPDATE.value + "Password"),
+    UPDATE_DELETE(UPDATE.value + "Delete"),
 
     // game engine messages
     ROOM("Room::"),

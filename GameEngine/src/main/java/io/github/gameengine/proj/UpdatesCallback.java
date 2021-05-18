@@ -67,6 +67,19 @@ public class UpdatesCallback implements ISubscribeCallback {
                                 .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
                                 .execute();
                     }
+                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {
+                    if (DBManager.getInstance().updateIsDeleted(data)) {
+                        messagingAPI.publish()
+                                .message(new UpdateResponseData(data, true, "Delete"))
+                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .execute();
+                    }
+                    else {
+                        messagingAPI.publish()
+                                .message(new UpdateResponseData(data, false, "Delete"))
+                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .execute();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
