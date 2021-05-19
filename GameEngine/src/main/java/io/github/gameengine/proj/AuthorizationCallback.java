@@ -10,6 +10,8 @@ import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
 
+import java.util.logging.Logger;
+
 /**
  * Callback class for the authorization service. This class will get the message from the API and make corresponding
  * method calls with the database through the server
