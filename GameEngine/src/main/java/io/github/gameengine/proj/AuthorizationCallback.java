@@ -10,6 +10,8 @@ import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
 
+import java.util.logging.Logger;
+
 /**
  * Callback class for the authorization service. This class will get the message from the API and make corresponding
  * method calls with the database through the server
@@ -41,25 +43,32 @@ public class AuthorizationCallback implements ISubscribeCallback{
             try {
                 if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {     //Checking if validating login
                     if (DBManager.getInstance().verifyLogin(data)) {       //checking if login is correct
-                        mApi.publish()
-                                .message(new LoginResponseData(data, true, "Validate"))
-                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-                                .execute();
+                        if (DBManager.getInstance().getIsDeleted(data)) {
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, true, "Validate", true))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        } else {
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, true, "Validate", false))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        }
                     } else {                                                //login unsuccessful
                         mApi.publish()
-                                .message(new LoginResponseData(data, false, "Validate"))
+                                .message(new LoginResponseData(data, false, "Validate", false))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {    //Checking if create account
                     if (DBManager.getInstance().createAccount(data)) {      //account created successfully
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, "Create"))
+                                    .message(new LoginResponseData(data, true, "Create", false))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         } else {                                            //account already exists
                             mApi.publish()
-                                    .message(new LoginResponseData(data, false, "Create"))
+                                    .message(new LoginResponseData(data, false, "Create", false))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }

@@ -220,4 +220,30 @@ public class DBManager extends DBSource{
         }
         return temp;
     }
+
+    public boolean getIsDeleted (LoginData loginData) {
+        String sql = "SELECT isDeleted FROM users WHERE username = ? AND password = ?;";
+        boolean temp = false;
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, loginData.getUsername(),
+                        loginData.getPassword()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setString(1, (String) params[0]);
+                        stat.setString(2, (String) params[1]);
+                    }
+                };
+                ResultSet rs2 = stat.executeQuery();
+        ) {
+            while(rs2.next())
+            {
+                if (rs2.getBoolean("isDeleted"))
+                    temp = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
 }
