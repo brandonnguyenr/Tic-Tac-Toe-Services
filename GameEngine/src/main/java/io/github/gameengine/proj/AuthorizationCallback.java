@@ -10,8 +10,6 @@ import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
 
-import java.util.logging.Logger;
-
 /**
  * Callback class for the authorization service. This class will get the message from the API and make corresponding
  * method calls with the database through the server
@@ -41,14 +39,16 @@ public class AuthorizationCallback implements ISubscribeCallback{
             LoginData data = GsonWrapper.fromJson(message.getMessage(), LoginData.class);
 
             try {
-                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {     //Checking if validating login
-                    if (DBManager.getInstance().verifyLogin(data)) {       //checking if login is correct
+                //Checking if the message was sent to the validate channel
+                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {
+                    if (DBManager.getInstance().verifyLogin(data)) {        //checking if login is correct
+                        //if the login was successful checking if the account is deleted or not
                         if (DBManager.getInstance().getIsDeleted(data)) {
                             mApi.publish()
                                     .message(new LoginResponseData(data, true, "Validate", true))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
-                        } else {
+                        } else {                                            //account not deleted case
                             mApi.publish()
                                     .message(new LoginResponseData(data, true, "Validate", false))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())

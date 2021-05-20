@@ -68,8 +68,8 @@ public class UpdatesCallback implements ISubscribeCallback {
                                 .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
                                 .execute();
                     }
-                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {
-                    if (DBManager.getInstance().updateIsDeleted(data)) {
+                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {       //checking if updating deletion status
+                    if (DBManager.getInstance().updateIsDeleted(data)) {                                //checking if deletion was successful
                         messagingAPI.publish()
                                 .message(new UpdateResponseData(data, true, "Delete"))
                                 .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
