@@ -221,6 +221,12 @@ public class DBManager extends DBSource{
         return temp;
     }
 
+    /**
+     * This method will check the deleted status of the particular user specified with the username and password.
+     * @param loginData: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
     public boolean getIsDeleted (LoginData loginData) {
         String sql = "SELECT isDeleted FROM users WHERE username = ? AND password = ?;";
         boolean temp = false;
