@@ -3,6 +3,8 @@ package io.github.gameengine.proj;
 import io.github.API.MessagingAPI;
 import io.github.coreutils.proj.messages.Channels;
 
+import java.util.LinkedList;
+
 public class GameEngine {
     private MessagingAPI api;
     private AuthorizationCallback ac;
@@ -16,6 +18,7 @@ public class GameEngine {
         api = new MessagingAPI();
         ac = new AuthorizationCallback();
         uc = new UpdatesCallback();
+        rc = new RoomsCallback(new LinkedList<>());
         api.subscribe()
                 .channels(Channels.AUTHOR_VALIDATE.toString(),
                         Channels.AUTHOR_CREATE.toString(),
@@ -31,6 +34,7 @@ public class GameEngine {
 
         api.addEventListener(uc, Channels.UPDATE_USERNAME.toString(), Channels.UPDATE_PERSONAL_INFO.toString(),
                 Channels.UPDATE_PASSWORD.toString());
+        api.addEventListener(rc, Channels.ROOM_LIST.toString());
 
         api.onclose(() -> {
             System.out.println("api is now dead..");

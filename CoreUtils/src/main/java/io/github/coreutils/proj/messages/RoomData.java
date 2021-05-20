@@ -1,5 +1,6 @@
 package io.github.coreutils.proj.messages;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,9 @@ public class RoomData {
         DENIED,
     }
 
+    private String title;
+    @Setter(AccessLevel.NONE)
+    private int playerCount;
     private PlayerData player1 = null;
     private PlayerData player2 = null;
 
@@ -29,12 +33,15 @@ public class RoomData {
 
 
     public void addPlayer(PlayerData player) {
-        if (getPlayer1() == null)
+        if (getPlayer1() == null) {
             setPlayer1(player);
-        else if (getPlayer2() == null)
+            playerCount++;
+        } else if (getPlayer2() == null) {
             setPlayer2(player);
-        else
+            playerCount++;
+        } else {
             throw new IllegalArgumentException("Game Room is full!");
+        }
     }
 
     public boolean hasPlayer(PlayerData player) {
