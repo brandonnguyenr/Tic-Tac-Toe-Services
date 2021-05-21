@@ -46,7 +46,10 @@ public class GameEngine {
         api.addEventListener(gc, Channels.ROOM_REQUEST.toString(), Channels.ROOM_MOVE.toString());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            api.free();
+            if (api.isAlive()) {
+                System.out.println("cleaned externally");
+                api.free();
+            }
             try {
                 latch.await();
             } catch (InterruptedException e) {
