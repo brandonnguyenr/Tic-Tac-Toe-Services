@@ -22,7 +22,7 @@ public class GameEngine {
 
     public GameEngine() {
         latch = new CountDownLatch(1);
-//        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
         api = new MessagingAPI();
         ac = new AuthorizationCallback();
         uc = new UpdatesCallback();
@@ -63,9 +63,8 @@ public class GameEngine {
             latch.countDown();
         });
 
-//        String killCode = in.next();
-//        if (killCode.equalsIgnoreCase("KILL"))
-//            api.free();
+        if (in.next().equalsIgnoreCase("KILL"))
+            api.free();
     }
 
     public static void main(String[] args) {
