@@ -17,7 +17,7 @@ public class PlayerData {
     }
 
     private String playerID = null;
-    private String playerName = null;
+    private String playerUserName = null;
     private Token playerToken = Token.BLANK;
     private String channel = null;
     @Setter(AccessLevel.NONE)
@@ -28,15 +28,15 @@ public class PlayerData {
         // empty
     }
 
-    public PlayerData(String playerID, String playerName, Token playerToken) {
+    public PlayerData(String playerID, String playerUserName, Token playerToken) {
         this.playerID = playerID;
-        this.playerName = playerName;
+        this.playerUserName = playerUserName;
         this.playerToken = playerToken;
     }
 
     public PlayerData(PlayerData original) {
         this.playerID = original.playerID;
-        this.playerName = original.playerName;
+        this.playerUserName = original.playerUserName;
         this.playerToken = original.playerToken;
         this.channel = original.channel;
         this.type = original.type;
@@ -50,7 +50,7 @@ public class PlayerData {
     public String toString() {
         return "PlayerData{" +
                 "playerID='" + playerID + '\'' +
-                ", playerName='" + playerName + '\'' +
+                ", playerName='" + playerUserName + '\'' +
                 ", playerToken=" + playerToken +
                 ", channel='" + channel + '\'' +
                 ", type=" + type +
@@ -63,7 +63,7 @@ public class PlayerData {
         if (!(o instanceof PlayerData)) return false;
         PlayerData that = (PlayerData) o;
         return Objects.equals(playerID, that.playerID) &&
-                Objects.equals(playerName, that.playerName) &&
+                Objects.equals(playerUserName, that.playerUserName) &&
                 playerToken == that.playerToken &&
                 Objects.equals(channel, that.channel) &&
                 getType() == that.getType();
@@ -71,6 +71,6 @@ public class PlayerData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerID, playerName, playerToken, channel, getType());
+        return Objects.hash(playerID, playerUserName, playerToken, channel, getType());
     }
 }

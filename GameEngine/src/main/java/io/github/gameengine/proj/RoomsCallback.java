@@ -6,7 +6,6 @@ import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.messagedata.MsgStatusCategory;
 import io.github.coreutils.proj.messages.Channels;
-import io.github.coreutils.proj.messages.PlayerData;
 import io.github.coreutils.proj.messages.RoomData;
 
 import java.util.List;
@@ -16,14 +15,6 @@ public class RoomsCallback implements ISubscribeCallback {
 
     public RoomsCallback(List<RoomData> roomDataList) {
         this.roomDataList = roomDataList;
-        RoomData test = new RoomData();
-        test.setTitle("hackers");
-        test.addPlayer(new PlayerData());
-        RoomData test2 = new RoomData();
-        test2.setTitle("coders");
-        test2.addPlayer(new PlayerData());
-        this.roomDataList.add(test);
-        this.roomDataList.add(test2);
     }
 
     @Override
@@ -31,7 +22,7 @@ public class RoomsCallback implements ISubscribeCallback {
         if (status.getCategory().equals(MsgStatusCategory.MsgConnectedCategory)) {
             mApi.publish()
                     .message(roomDataList)
-                    .channel(Channels.ROOM_LIST.toString())
+                    .channel(Channels.REQUEST + Channels.ROOM_LIST.toString())
                     .execute();
         }
     }
@@ -40,10 +31,18 @@ public class RoomsCallback implements ISubscribeCallback {
     @Override
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {
         if (message.getChannel().equals(Channels.ROOM_LIST.toString())) {
-            if (!message.getPublisherUuid().equals(mApi.getUuid())) {
+            System.out.println("RoomsCallback " + mApi.getUuid());
+            System.out.println("publisher " + message.getPublisherUuid());
+            System.out.println(message.getMessage());
+            if (message.getMessage().contains("ping")) {
                 mApi.publish()
                         .message(roomDataList)
-                        .channel(Channels.ROOM_LIST.toString())
+                        .channel(Channels.PRIVATE + message.getPublisherUuid())
+                        .execute();
+            } else {
+                mApi.publish()
+                        .message(roomDataList)
+                        .channel(Channels.REQUEST + Channels.ROOM_LIST.toString())
                         .execute();
             }
         }

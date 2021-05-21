@@ -19,8 +19,10 @@ public final class RoomFactory {
         return data;
     }
 
-    public static RoomData makeCreateRoom() {
+    public static RoomData makeCreateRoom(String roomTitle, PlayerData player) {
         RoomData data = new RoomData();
+        data.setTitle(roomTitle);
+        data.setPlayer1(player);
         data.setRequestType(RoomData.RequestType.NORMAL);
         return data;
     }

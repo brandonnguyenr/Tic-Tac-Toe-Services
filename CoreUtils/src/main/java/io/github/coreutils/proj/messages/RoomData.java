@@ -17,7 +17,7 @@ public class RoomData {
 
     private String title;
     @Setter(AccessLevel.NONE)
-    private int playerCount;
+    private int playerCount = 0;
     private PlayerData player1 = null;
     private PlayerData player2 = null;
 

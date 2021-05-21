@@ -12,11 +12,14 @@ public enum Channels {
     UPDATE_PERSONAL_INFO(UPDATE.value + "Personal Info"),
     UPDATE_PASSWORD(UPDATE.value + "Password"),
 
-    //game engine messages
+    // game engine messages
     ROOM("Room::"),
     ROOM_REQUEST(ROOM.value + "Requests"),
     ROOM_LIST(ROOM.value + "List"),
     ROOM_MOVE(ROOM.value + "Move"),
+
+    // request back channel
+    REQUEST("REQUEST::"),
 
     //private messages
     PRIVATE("Private::");
