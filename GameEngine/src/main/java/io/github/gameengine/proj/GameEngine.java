@@ -23,6 +23,7 @@ public class GameEngine {
     public GameEngine() {
         latch = new CountDownLatch(1);
         Scanner in = new Scanner(System.in);
+
         api = new MessagingAPI();
         ac = new AuthorizationCallback();
         uc = new UpdatesCallback();

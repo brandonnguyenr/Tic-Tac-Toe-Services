@@ -5,6 +5,7 @@ import io.github.API.MessagingAPI;
 import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
+import io.github.coreutils.proj.messages.Ping;
 import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.MoveRequestData;
@@ -25,12 +26,12 @@ public class GamesCallback implements ISubscribeCallback {
     /*===============================HELPER METHODS START============================================*/
     private void publishRoomList(MessagingAPI api) {
         api.publish()
-                .message(roomDataList)
+                .message(new Ping())
                 .channel(Channels.ROOM_LIST.toString())
                 .execute();
     }
 
-    private void creatRoom(MessagingAPI api, RoomData data) {
+    private void createRoom(MessagingAPI api, RoomData data) {
         final int roomID = GameEngine.getGameID();
         data.setRoomID(roomID);
 
@@ -39,7 +40,6 @@ public class GamesCallback implements ISubscribeCallback {
         roomDataList.add(data);
 
         if (data.isOpen()) {
-            System.out.println("published");
             publishRoomList(api);
         } else {
             // TODO: idk about this
@@ -102,7 +102,7 @@ public class GamesCallback implements ISubscribeCallback {
                     publishRoomList(mAPI);
                 }
             } else if (roomData.getRoomID() == -1) {
-                creatRoom(mAPI, roomData);
+                createRoom(mAPI, roomData);
             } else {
                 joinRoom(mAPI, roomData);
             }

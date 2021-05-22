@@ -8,7 +8,7 @@ public final class RoomFactory {
 
     public static RoomData makeDisconnectRoom(PlayerData playerData) {
         RoomData data = new RoomData();
-        data.setPlayer1(playerData);
+        data.addPlayer(playerData);
         data.setRequestType(RoomData.RequestType.DISCONNECT);
         return data;
     }
@@ -22,7 +22,7 @@ public final class RoomFactory {
     public static RoomData makeCreateRoom(String roomTitle, PlayerData player) {
         RoomData data = new RoomData();
         data.setTitle(roomTitle);
-        data.setPlayer1(player);
+        data.addPlayer(player);
         data.setRequestType(RoomData.RequestType.NORMAL);
         return data;
     }

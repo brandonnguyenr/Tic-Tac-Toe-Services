@@ -31,10 +31,7 @@ public class RoomsCallback implements ISubscribeCallback {
     @Override
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {
         if (message.getChannel().equals(Channels.ROOM_LIST.toString())) {
-            System.out.println("RoomsCallback " + mApi.getUuid());
-            System.out.println("publisher " + message.getPublisherUuid());
-            System.out.println(message.getMessage());
-            if (message.getMessage().contains("ping")) {
+            if (!message.getPublisherUuid().equals(mApi.getUuid())) {
                 mApi.publish()
                         .message(roomDataList)
                         .channel(Channels.PRIVATE + message.getPublisherUuid())
