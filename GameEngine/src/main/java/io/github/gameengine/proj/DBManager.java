@@ -202,10 +202,13 @@ public class DBManager extends DBSource{
     public boolean updateIsDeleted (UpdateData updateDeleted) {
         String sql = "UPDATE users SET isDeleted = ? WHERE username = ?;";
         boolean temp = false;
+
+        boolean isDeleted = updateDeleted.getIsDeleted().equalsIgnoreCase("TRUE");
+
         try (
                 Connection connection = getDataSource().getConnection();
                 PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
-                        updateDeleted.isDeleted(), updateDeleted.getUsername()) {
+                        isDeleted, updateDeleted.getUsername()) {
                     @Override
                     protected void prepareStatement(Object... params) throws SQLException {
                         stat.setBoolean(1, (boolean) params[0]);

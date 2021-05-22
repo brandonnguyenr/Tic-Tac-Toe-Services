@@ -45,30 +45,30 @@ public class AuthorizationCallback implements ISubscribeCallback{
                         //if the login was successful checking if the account is deleted or not
                         if (DBManager.getInstance().getIsDeleted(data)) {
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, "Validate", true))
+                                    .message(new LoginResponseData(data, true, "Validate", "true"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         } else {                                            //account not deleted case
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, "Validate", false))
+                                    .message(new LoginResponseData(data, true, "Validate", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }
                     } else {                                                //login unsuccessful
                         mApi.publish()
-                                .message(new LoginResponseData(data, false, "Validate", false))
+                                .message(new LoginResponseData(data, false, "Validate", "false"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {    //Checking if create account
                     if (DBManager.getInstance().createAccount(data)) {      //account created successfully
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, "Create", false))
+                                    .message(new LoginResponseData(data, true, "Create", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         } else {                                            //account already exists
                             mApi.publish()
-                                    .message(new LoginResponseData(data, false, "Create", false))
+                                    .message(new LoginResponseData(data, false, "Create", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }

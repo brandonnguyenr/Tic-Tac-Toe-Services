@@ -16,5 +16,5 @@ public class UpdateData {
     private String  lastName;
     private String  newUsername;
     private String  newPassword;
-    private boolean isDeleted;
+    private String  isDeleted;
 }
