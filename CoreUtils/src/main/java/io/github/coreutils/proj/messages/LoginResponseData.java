@@ -9,5 +9,5 @@ public class LoginResponseData {
     private final LoginData data;
     private final boolean loginSuccess;
     private final String info;
-    private final boolean isDeleted;
+    private final String isDeleted;
 }
