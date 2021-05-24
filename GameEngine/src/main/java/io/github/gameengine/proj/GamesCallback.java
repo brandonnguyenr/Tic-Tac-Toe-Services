@@ -77,6 +77,11 @@ public class GamesCallback implements ISubscribeCallback {
                 .channel(room.getPlayer2().getChannel())
                 .execute();
 
+        try {
+            Thread.sleep(3000); // TODO: This is soo hacky.. need to rethink
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         api.publish()
                 .message(new MoveRequestData(lobbyMap.get(roomID).getBoard(), room, room.getPlayer1().getPlayerID()))
                 .channel(room.getRoomChannel())

@@ -66,9 +66,9 @@ public class GameEngine {
             System.out.println("api is now dead..");
             latch.countDown();
         });
-
-        if (in.next().equalsIgnoreCase("KILL"))
-            api.free();
+        System.out.println("Started Game Service...");
+//        if (in.next().equalsIgnoreCase("KILL"))
+//            api.free();
     }
 
     public static void main(String[] args) {
