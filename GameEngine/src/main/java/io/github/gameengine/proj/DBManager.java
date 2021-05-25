@@ -35,6 +35,7 @@ public class DBManager extends DBSource{
         String sql = "SELECT password FROM users WHERE username = ? AND password = ?;";
         boolean temp = false;
         try (
+                //TODO: Exception thrown here
                 Connection connection = getDataSource().getConnection();
                 PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, loginData.getUsername(),
                                                                             loginData.getPassword()) {
