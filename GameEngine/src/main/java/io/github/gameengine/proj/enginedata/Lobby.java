@@ -35,9 +35,9 @@ public class Lobby {
 
     /*===============SETTERS START================*/
     public void toggleCurrentPlayer() {
-        currentPlayer = (currentPlayer.equals("") || currentPlayer.equals(roomData.getPlayer1().getPlayerID())) ?
-                roomData.getPlayer2().getPlayerID() :
-                roomData.getPlayer1().getPlayerID();
+        currentPlayer = (currentPlayer.equals("") || currentPlayer.equals(roomData.getPlayer2().getPlayerUserName())) ?
+                roomData.getPlayer1().getPlayerUserName() :
+                roomData.getPlayer2().getPlayerUserName();
     }
     /*===============SETTERS END================*/
 

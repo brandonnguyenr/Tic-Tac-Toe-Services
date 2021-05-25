@@ -31,18 +31,35 @@ public class RoomData {
     private PlayerData startingPlayerID;
     private PlayerData winningPlayerID;
 
+    public void setPlayer1(PlayerData player1) {
+        if (this.player1 == null)
+            incPlayerCount();
+        this.player1 = player1;
+    }
+
+    public void setPlayer2(PlayerData player2) {
+        if (this.player2 == null)
+            incPlayerCount();
+        this.player2 = player2;
+    }
+
+    public void incPlayerCount() {
+        playerCount++;
+    }
 
     public void addPlayer(PlayerData player) {
         if (getPlayer1() == null) {
             setPlayer1(player);
-            playerCount++;
+            incPlayerCount();
         } else if (getPlayer2() == null) {
             setPlayer2(player);
-            playerCount++;
+            incPlayerCount();
         } else {
             throw new IllegalArgumentException("Game Room is full!");
         }
     }
+
+
 
     public boolean hasPlayer(PlayerData player) {
         return player != null && (player.equals(getPlayer1()) || player.equals(getPlayer2()));

@@ -24,6 +24,8 @@ public class DBSource {
             dataSource.setMinIdle(1);
             dataSource.setMaxIdle(6);
             dataSource.setMaxTotal(10);
+            dataSource.setValidationQuery("SELECT 1;");
+            dataSource.setTestOnBorrow(true);
         }catch(IOException e) {
             e.printStackTrace();
         }

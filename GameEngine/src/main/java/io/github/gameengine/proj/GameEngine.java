@@ -29,6 +29,7 @@ public class GameEngine {
         uc = new UpdatesCallback();
         rc = new RoomsCallback(roomList);
         gc = new GamesCallback(roomList, lobbyDir);
+        mc = new MoveCallback(lobbyDir);
         api.subscribe()
                 .channels(Channels.AUTHOR_VALIDATE.toString(),
                         Channels.AUTHOR_CREATE.toString(),
@@ -45,6 +46,7 @@ public class GameEngine {
                 Channels.UPDATE_PASSWORD.toString());
         api.addEventListener(rc, Channels.ROOM_LIST.toString());
         api.addEventListener(gc, Channels.ROOM_REQUEST.toString(), Channels.ROOM_MOVE.toString());
+        api.addEventListener(mc, Channels.ROOM_MOVE.toString());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (api.isAlive()) {

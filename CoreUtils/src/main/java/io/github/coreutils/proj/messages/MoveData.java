@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MoveData {
     private int roomID;
-    private String playerID; //UUID
+    private String playerUserName;
     private int x;
     private int y;
     private long time;

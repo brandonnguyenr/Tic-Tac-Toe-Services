@@ -13,11 +13,11 @@ public enum Token {
 
     /**
      * Constructor
-     * @param initToken value of specific enum
+     * @param token value of specific enum
      * @author Kord Boniadi
      */
-    Token(char initToken) {
-        this.token = initToken;
+    Token(char token) {
+        this.token = token;
     }
 
     /**

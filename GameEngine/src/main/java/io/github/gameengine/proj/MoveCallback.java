@@ -28,7 +28,7 @@ public class MoveCallback implements ISubscribeCallback {
         int roomID = data.getRoomID();
         if (lobbyList.containsKey(roomID)) {
             lobby = lobbyList.get(roomID);
-            return lobby.isRunning() && lobby.getCurrentPlayer().equals(data.getPlayerID());
+            return lobby.isRunning() && lobby.getCurrentPlayer().equals(data.getPlayerUserName());
         }
         return false;
     }
@@ -65,20 +65,25 @@ public class MoveCallback implements ISubscribeCallback {
             int roomID = data.getRoomID();
             if (isValidMove(data)) {
                 Lobby lobby = lobbyList.get(roomID);
-                Token token = (data.getPlayerID().equals(lobby.getRoomData().getPlayer1().getPlayerID())) ? Token.X : Token.O;
+                Token token = (data.getPlayerUserName().equals(lobby.getRoomData().getPlayer1().getPlayerUserName())) ? Token.X : Token.O;
                 lobby.getBoard().updateToken(data.getX(), data.getY(), token);
 
-                if (isWinner(lobby.getBoard(), token) || lobby.getBoard().isBoardFull()) {
+                if (isWinner(lobby.getBoard(), token)) {
+                    mApi.publish()
+                            .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null, token))
+                            .channel(lobby.getRoomData().getRoomChannel())
+                            .execute();
+                    lobby.endGame();
+                } else if (lobby.getBoard().isBoardFull()) {
                     mApi.publish()
                             .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null))
-                            .channel(lobby.getRoomData().getRoomChannel().toString())
+                            .channel(lobby.getRoomData().getRoomChannel())
                             .execute();
                     lobby.endGame();
                 } else {
                     lobby.toggleCurrentPlayer();
-
                     List<String> outGoingChannels = new LinkedList<>();
-                    outGoingChannels.add(lobby.getRoomData().getRoomChannel().toString());
+                    outGoingChannels.add(lobby.getRoomData().getRoomChannel());
                     if (lobby.getRoomData().getPlayer2().isAI())
                         outGoingChannels.add(lobby.getRoomData().getPlayer2().getChannel());
 

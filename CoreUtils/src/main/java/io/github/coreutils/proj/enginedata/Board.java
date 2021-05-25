@@ -1,6 +1,9 @@
 package io.github.coreutils.proj.enginedata;
 
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -9,23 +12,20 @@ import java.util.Objects;
  * state of a tic tac toe match.
  * @author Grant Goldsworth
  */
+@Getter
 public class Board {
+    @Getter(AccessLevel.NONE)
     public final int BOARD_ROWS = 3;
+    @Getter(AccessLevel.NONE)
     public final int BOARD_COLUMNS = 3;
-    private final Token[][] board = new Token[BOARD_ROWS][BOARD_COLUMNS];
+    private final Token[][] underlyingBoard = new Token[BOARD_ROWS][BOARD_COLUMNS];
 
     /**
      * Constructs a Board object by setting all values of Token[][] board to BLANK.
      */
     public Board() {
-        Arrays.stream(board).forEach(str -> Arrays.fill(str, Token.BLANK));
+        Arrays.stream(underlyingBoard).forEach(str -> Arrays.fill(str, Token.BLANK));
     }
-
-    /**
-     * Gets the current Token[][] board of a Board object.
-     * @return the Token[][] board of a Board object
-     */
-    public Token[][] getUnderlyingBoard() { return board; }
 
     /**
      * After checking to make sure the passed in position is within the board,
@@ -40,7 +40,7 @@ public class Board {
         if ((col > BOARD_COLUMNS || row > BOARD_ROWS) || ( col < 0 || row < 0))
             throw new IllegalArgumentException(String.format("invalid xy position --> (%d, %d):" +
                     "valid bounds are (%d, %d]", col, row, 0, BOARD_ROWS));
-        board[row][col] = c;
+        underlyingBoard[row][col] = c;
     }
 
     /**
@@ -55,7 +55,7 @@ public class Board {
         if ((col > BOARD_COLUMNS || row > BOARD_ROWS) || ( col < 0 || row < 0))
             throw new IllegalArgumentException(String.format("invalid xy position --> (%d, %d):" +
                     "valid bounds are (%d, %d]", col, row, 0, BOARD_ROWS));
-        return board[row][col];
+        return underlyingBoard[row][col];
     }
 
     /**
@@ -65,7 +65,7 @@ public class Board {
      * @author Grant Goldsworth
      */
     public boolean isBoardFull() {
-        for (Token[] row : board) {
+        for (Token[] row : underlyingBoard) {
             for (Token col : row) {
                 // does cell have a valid token? If not, board isn't empty
                 if (col == Token.BLANK)
@@ -80,7 +80,7 @@ public class Board {
      * Sets all values within Token[][] board to BLANK.
      */
     public void clearBoard() {
-        for (Token[] row: board) Arrays.fill(row, Token.BLANK);
+        for (Token[] row: underlyingBoard) Arrays.fill(row, Token.BLANK);
     }
 
     /**
@@ -120,7 +120,7 @@ public class Board {
         char delim = '|';
         StringBuilder buf = new StringBuilder();
         int i = 0;
-        for (Token[] row : board) {
+        for (Token[] row : underlyingBoard) {
             for (var col : row) {
                 buf.append(col);
                 if (i < 2)

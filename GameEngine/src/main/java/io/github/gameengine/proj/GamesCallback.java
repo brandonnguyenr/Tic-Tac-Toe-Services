@@ -5,6 +5,7 @@ import io.github.API.MessagingAPI;
 import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
+import io.github.coreutils.proj.enginedata.Token;
 import io.github.coreutils.proj.messages.Ping;
 import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.messages.Channels;
@@ -78,12 +79,13 @@ public class GamesCallback implements ISubscribeCallback {
                 .execute();
 
         try {
-            Thread.sleep(3000); // TODO: This is soo hacky.. need to rethink
+            Thread.sleep(1000); // TODO: This is soo hacky.. need to rethink
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         api.publish()
-                .message(new MoveRequestData(lobbyMap.get(roomID).getBoard(), room, room.getPlayer1().getPlayerID()))
+                .message(new MoveRequestData(lobbyMap.get(roomID).getBoard(), room, room.getPlayer1().getPlayerUserName()))
                 .channel(room.getRoomChannel())
                 .execute();
 

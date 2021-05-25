@@ -25,7 +25,7 @@ public class DBManager {
         boolean temp = false;
         try (
                 Connection connection = DBSource.getDataSource().getConnection();
-                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, data.getRoomID(), data.getPlayerID(), data.getX(), data.getY(), data.getTime()) {
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, data.getRoomID(), data.getPlayerUserName(), data.getX(), data.getY(), data.getTime()) {
                     @Override
                     protected void prepareStatement(Object... params) throws SQLException {
                         stat.setString(1, (String) params[0]);
@@ -49,8 +49,8 @@ public class DBManager {
         try (
                 Connection connection = DBSource.getDataSource().getConnection();
                 PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
-                        data.getStartTime(), data.getEndTime(), data.getPlayer1().getPlayerID(),
-                        data.getPlayer2().getPlayerID(), data.getStartingPlayerID().getPlayerID(),data.getWinningPlayerID().getPlayerID()) {
+                        data.getStartTime(), data.getEndTime(), data.getPlayer1().getPlayerUserName(),
+                        data.getPlayer2().getPlayerUserName(), data.getStartingPlayerID().getPlayerUserName(),data.getWinningPlayerID().getPlayerUserName()) {
                     @Override
                     protected void prepareStatement(Object... params) throws SQLException {
                         stat.setString(1, (String) params[0]);
