@@ -27,8 +27,9 @@ public class RoomResponse {
     private String roomID;
     private String startTime;
     private String endTime;
+    private String result;
 
-    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private String winningPlayer;
 
     /**
@@ -61,6 +62,8 @@ public class RoomResponse {
         this.roomID = Integer.toString(room.getRoomID());
         this.startTime = getFormattedTime(room.getStartTime());
         this.endTime = getFormattedTime(room.getEndTime());
+
+        this.result = getWinLossTie();
     }
 
     /**
