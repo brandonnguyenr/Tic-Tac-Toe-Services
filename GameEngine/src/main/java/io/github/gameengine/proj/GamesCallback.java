@@ -79,7 +79,7 @@ public class GamesCallback implements ISubscribeCallback {
                 .execute();
 
         try {
-            Thread.sleep(1000); // TODO: This is soo hacky.. need to rethink
+            Thread.sleep(2000); // TODO: This is soo hacky.. need to rethink
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
