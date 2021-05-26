@@ -27,7 +27,7 @@ public class PlayerData {
         // empty
     }
 
-    public PlayerData(String playerID, String playerUserName, Token playerToken) {
+    public PlayerData(String playerUserName, Token playerToken) {
         this.playerUserName = playerUserName;
         this.playerToken = playerToken;
     }

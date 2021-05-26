@@ -78,17 +78,6 @@ public class GamesCallback implements ISubscribeCallback {
                 .channel(room.getPlayer2().getChannel())
                 .execute();
 
-        try {
-            Thread.sleep(2000); // TODO: This is soo hacky.. need to rethink
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        api.publish()
-                .message(new MoveRequestData(lobbyMap.get(roomID).getBoard(), room, room.getPlayer1().getPlayerUserName()))
-                .channel(room.getRoomChannel())
-                .execute();
-
         lobbyMap.get(roomID).toggleCurrentPlayer();
     }
     /*===============================HELPER METHODS END============================================*/
@@ -113,6 +102,12 @@ public class GamesCallback implements ISubscribeCallback {
             } else {
                 joinRoom(mAPI, roomData);
             }
+        } else if (message.getChannel().equals(Channels.REQUEST_MOVE.toString())) {
+            RoomData roomData = GsonWrapper.fromJson(message.getMessage(), RoomData.class);
+            mAPI.publish()
+                    .message(new MoveRequestData(lobbyMap.get(roomData.getRoomID()).getBoard(), roomData, roomData.getPlayer1().getPlayerUserName()))
+                    .channel(roomData.getRoomChannel())
+                    .execute();
         }
     }
 

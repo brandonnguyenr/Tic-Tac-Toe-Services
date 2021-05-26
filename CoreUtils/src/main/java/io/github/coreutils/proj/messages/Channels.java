@@ -21,6 +21,7 @@ public enum Channels {
 
     // request back channel
     REQUEST("REQUEST::"),
+    REQUEST_MOVE(REQUEST.value + "Move"),
 
     //private messages
     PRIVATE("Private::");
