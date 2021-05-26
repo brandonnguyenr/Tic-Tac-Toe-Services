@@ -20,7 +20,7 @@ public class DBSource {
             dataSource.setUrl(properties.getProperty("DB_CONNECTION_URL"));
             dataSource.setUsername(properties.getProperty("DB_USER"));
             dataSource.setPassword(properties.getProperty("DB_PWD"));
-            dataSource.setValidationQuery("SELECT 1;");
+//            dataSource.setValidationQuery("SELECT 1;");
             //dataSource.setMaxWaitMillis(-1);
             //dataSource.restart();
             dataSource.setTestOnBorrow(true);
