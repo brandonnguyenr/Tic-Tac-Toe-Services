@@ -84,7 +84,7 @@ public class GamesCallback implements ISubscribeCallback {
         }
 
         api.publish()
-                .message(new MoveRequestData(lobbyMap.get(roomID).getBoard(), room, room.getPlayer1().getPlayerID()))
+                .message(new MoveRequestData(lobbyMap.get(roomID).getBoard(), room, room.getPlayer1().getPlayerUserName()))
                 .channel(room.getRoomChannel())
                 .execute();
 

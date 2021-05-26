@@ -65,7 +65,7 @@ public class MoveCallback implements ISubscribeCallback {
             int roomID = data.getRoomID();
             if (isValidMove(data)) {
                 Lobby lobby = lobbyList.get(roomID);
-                Token token = (data.getPlayerID().equals(lobby.getRoomData().getPlayer1().getPlayerID())) ? Token.X : Token.O;
+                Token token = (data.getPlayerID().equals(lobby.getRoomData().getPlayer1().getPlayerUserName())) ? Token.X : Token.O;
                 lobby.getBoard().updateToken(data.getX(), data.getY(), token);
 
                 if (isWinner(lobby.getBoard(), token) || lobby.getBoard().isBoardFull()) {

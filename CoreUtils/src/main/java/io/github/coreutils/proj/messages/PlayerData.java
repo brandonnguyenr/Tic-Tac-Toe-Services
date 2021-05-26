@@ -16,7 +16,6 @@ public class PlayerData {
         AI_HARD,
     }
 
-    private String playerID = null;
     private String playerUserName = null;
     private Token playerToken = Token.BLANK;
     private String channel = null;
@@ -28,14 +27,12 @@ public class PlayerData {
         // empty
     }
 
-    public PlayerData(String playerID, String playerUserName, Token playerToken) {
-        this.playerID = playerID;
+    public PlayerData(String playerUserName, Token playerToken) {
         this.playerUserName = playerUserName;
         this.playerToken = playerToken;
     }
 
     public PlayerData(PlayerData original) {
-        this.playerID = original.playerID;
         this.playerUserName = original.playerUserName;
         this.playerToken = original.playerToken;
         this.channel = original.channel;
@@ -49,8 +46,7 @@ public class PlayerData {
     @Override
     public String toString() {
         return "PlayerData{" +
-                "playerID='" + playerID + '\'' +
-                ", playerName='" + playerUserName + '\'' +
+                "playerName='" + playerUserName + '\'' +
                 ", playerToken=" + playerToken +
                 ", channel='" + channel + '\'' +
                 ", type=" + type +
@@ -62,8 +58,7 @@ public class PlayerData {
         if (this == o) return true;
         if (!(o instanceof PlayerData)) return false;
         PlayerData that = (PlayerData) o;
-        return Objects.equals(playerID, that.playerID) &&
-                Objects.equals(playerUserName, that.playerUserName) &&
+        return Objects.equals(playerUserName, that.playerUserName) &&
                 playerToken == that.playerToken &&
                 Objects.equals(channel, that.channel) &&
                 getType() == that.getType();
@@ -71,6 +66,6 @@ public class PlayerData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerID, playerUserName, playerToken, channel, getType());
+        return Objects.hash(playerUserName, playerToken, channel, getType());
     }
 }
