@@ -39,27 +39,36 @@ public class AuthorizationCallback implements ISubscribeCallback{
             LoginData data = GsonWrapper.fromJson(message.getMessage(), LoginData.class);
 
             try {
-                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {     //Checking if validating login
-                    if (DBManager.getInstance().verifyLogin(data)) {       //checking if login is correct
-                        mApi.publish()
-                                .message(new LoginResponseData(data, true, "Validate"))
-                                .channel(Channels.PRIVATE + message.getPublisherUuid())
-                                .execute();
+                //Checking if the message was sent to the validate channel
+                if (message.getChannel().equals(Channels.AUTHOR_VALIDATE.toString())) {
+                    if (DBManager.getInstance().verifyLogin(data)) {        //checking if login is correct
+                        //if the login was successful checking if the account is deleted or not
+                        if (DBManager.getInstance().getIsDeleted(data)) {
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, true, "Validate", "true"))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        } else {                                            //account not deleted case
+                            mApi.publish()
+                                    .message(new LoginResponseData(data, true, "Validate", "false"))
+                                    .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                    .execute();
+                        }
                     } else {                                                //login unsuccessful
                         mApi.publish()
-                                .message(new LoginResponseData(data, false, "Validate"))
+                                .message(new LoginResponseData(data, false, "Validate", "false"))
                                 .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 } else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {    //Checking if create account
                     if (DBManager.getInstance().createAccount(data)) {      //account created successfully
                             mApi.publish()
-                                    .message(new LoginResponseData(data, true, "Create"))
+                                    .message(new LoginResponseData(data, true, "Create", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         } else {                                            //account already exists
                             mApi.publish()
-                                    .message(new LoginResponseData(data, false, "Create"))
+                                    .message(new LoginResponseData(data, false, "Create", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
                         }

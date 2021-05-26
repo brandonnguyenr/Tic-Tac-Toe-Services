@@ -36,6 +36,7 @@ public class GameEngine {
                         Channels.UPDATE_USERNAME.toString(),
                         Channels.UPDATE_PERSONAL_INFO.toString(),
                         Channels.UPDATE_PASSWORD.toString(),
+                        Channels.UPDATE_DELETE.toString(),
                         Channels.ROOM_REQUEST.toString(),
                         Channels.ROOM_MOVE.toString(),
                         Channels.ROOM_LIST.toString())
@@ -43,7 +44,7 @@ public class GameEngine {
 
         api.addEventListener(ac, Channels.AUTHOR_VALIDATE.toString(), Channels.AUTHOR_CREATE.toString());
         api.addEventListener(uc, Channels.UPDATE_USERNAME.toString(), Channels.UPDATE_PERSONAL_INFO.toString(),
-                Channels.UPDATE_PASSWORD.toString());
+                             Channels.UPDATE_PASSWORD.toString(), Channels.UPDATE_DELETE.toString());
         api.addEventListener(rc, Channels.ROOM_LIST.toString());
         api.addEventListener(gc, Channels.ROOM_REQUEST.toString(), Channels.ROOM_MOVE.toString());
         api.addEventListener(mc, Channels.ROOM_MOVE.toString());

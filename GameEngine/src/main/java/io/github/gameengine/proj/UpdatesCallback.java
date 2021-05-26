@@ -26,7 +26,8 @@ public class UpdatesCallback implements ISubscribeCallback {
     public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
         if (msgResultAPI.getChannel().equals(Channels.UPDATE_USERNAME.toString()) ||
                 msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString()) ||
-                msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString())) {
+                msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString()) ||
+                msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {
 
             UpdateData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), UpdateData.class);
 
@@ -64,6 +65,20 @@ public class UpdatesCallback implements ISubscribeCallback {
                     } else {                                                //update unsuccessful
                         messagingAPI.publish()
                                 .message(new UpdateResponseData(data, false, "Password"))
+                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .execute();
+                    }
+                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {       //checking if updating deletion status
+                    if (DBManager.getInstance().updateIsDeleted(data)) {
+                        //checking if deletion was successful
+                        messagingAPI.publish()
+                                .message(new UpdateResponseData(data, true, "Delete"))
+                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .execute();
+                    }
+                    else {
+                        messagingAPI.publish()
+                                .message(new UpdateResponseData(data, false, "Delete"))
                                 .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
                                 .execute();
                     }

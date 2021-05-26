@@ -10,10 +10,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class UpdateData {
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String newUsername;
-    private String newPassword;
+    private String  username;
+    private String  password;
+    private String  firstName;
+    private String  lastName;
+    private String  newUsername;
+    private String  newPassword;
+    private String  isDeleted;
 }
