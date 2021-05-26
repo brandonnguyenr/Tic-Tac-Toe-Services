@@ -192,4 +192,67 @@ public class DBManager extends DBSource{
         }
         return temp;
     }
+
+    /**
+     * This method will update the account deletion status of the particular user specified with the username.
+     * @param updateDeleted: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
+    public boolean updateIsDeleted (UpdateData updateDeleted) {
+        String sql = "UPDATE users SET isDeleted = ? WHERE username = ?;";
+        boolean temp = false;
+
+        boolean isDeleted = updateDeleted.getIsDeleted().equalsIgnoreCase("TRUE");
+
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
+                        isDeleted, updateDeleted.getUsername()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setBoolean(1, (boolean) params[0]);
+                        stat.setString(2, (String) params[1]);
+                    }
+                };
+        ) {
+            if (stat.executeUpdate() != 0)
+                temp = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    /**
+     * This method will check the deleted status of the particular user specified with the username and password.
+     * @param loginData: The class that contains all the data to update
+     * @return a boolean representation of the request whether it was successful or not
+     * @author Utsav Parajuli
+     */
+    public boolean getIsDeleted (LoginData loginData) {
+        String sql = "SELECT isDeleted FROM users WHERE username = ? AND password = ?;";
+        boolean temp = false;
+        try (
+                Connection connection = getDataSource().getConnection();
+                PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, loginData.getUsername(),
+                        loginData.getPassword()) {
+                    @Override
+                    protected void prepareStatement(Object... params) throws SQLException {
+                        stat.setString(1, (String) params[0]);
+                        stat.setString(2, (String) params[1]);
+                    }
+                };
+                ResultSet rs2 = stat.executeQuery();
+        ) {
+            while(rs2.next())
+            {
+                if (rs2.getBoolean("isDeleted"))
+                    temp = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
 }
