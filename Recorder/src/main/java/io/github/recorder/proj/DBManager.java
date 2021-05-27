@@ -111,6 +111,7 @@ public class DBManager {
             winner = getPlayerID(data.getWinningPlayerID().getPlayerUserName());
         }
 
+        System.out.println("(writeRoom) call with " + data + "\n\n");
         // check if room is open, don't want to be calling data on null players
         String sql = "INSERT INTO rooms(player1id, player2id, starttime, endtime, startingid, winningid, istie) VALUES(?, ?, ?, ?, ?, ?, ?) RETURNING id;";
         try (

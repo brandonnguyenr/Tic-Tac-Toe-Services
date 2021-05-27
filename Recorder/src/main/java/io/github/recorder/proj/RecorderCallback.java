@@ -9,16 +9,18 @@ import io.github.coreutils.proj.messages.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class RecorderCallback implements ISubscribeCallback {
 
     //  ROOM ID    MOVE ARRAY
-    Map<Integer, MoveData[]> multiplayerMoves;
-    Map<Integer, MoveData[]> singleplayerMoves;
+    ConcurrentHashMap<Integer, MoveData[]> multiplayerMoves;
+    ConcurrentHashMap<Integer, MoveData[]> singleplayerMoves;
 
     public RecorderCallback() {
-        multiplayerMoves  = new HashMap<>();
-        singleplayerMoves = new HashMap<>();
+        multiplayerMoves  = new ConcurrentHashMap<>();
+        singleplayerMoves = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -138,7 +140,10 @@ public class RecorderCallback implements ISubscribeCallback {
                 PlayerData computer = new PlayerData("Computer", null);
                 model.setPlayer1(room.getPlayer());
                 model.setPlayer2(room.getComputer());
-                model.setWinningPlayerID((room.isPlayerWin()) ? room.getPlayer() : room.getComputer());
+                model.setWinningPlayerID(
+                        room.getResult().equals(SinglePlayerRoomData.PlayerResult.WIN) ? room.getPlayer() :
+                                (room.getResult().equals(SinglePlayerRoomData.PlayerResult.TIE) ? null : computer)
+                );
                 model.setStartingPlayerID((room.isPlayerStart()) ? room.getPlayer() : room.getComputer());
                 model.setStartTime(room.getStartTime());
                 model.setEndTime(room.getEndTime());
