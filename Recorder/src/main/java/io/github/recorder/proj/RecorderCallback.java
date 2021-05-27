@@ -1,6 +1,5 @@
 package io.github.recorder.proj;
 
-import com.google.gson.Gson;
 import io.github.API.ISubscribeCallback;
 import io.github.API.MessagingAPI;
 import io.github.API.messagedata.MsgResultAPI;
@@ -14,10 +13,12 @@ import java.util.Map;
 public class RecorderCallback implements ISubscribeCallback {
 
     //  ROOM ID    MOVE ARRAY
-    Map<Integer, MoveData[]> movesList;
+    Map<Integer, MoveData[]> multiplayerMoves;
+    Map<Integer, MoveData[]> singleplayerMoves;
 
     public RecorderCallback() {
-        movesList = new HashMap<>();
+        multiplayerMoves  = new HashMap<>();
+        singleplayerMoves = new HashMap<>();
     }
 
     @Override
@@ -41,17 +42,63 @@ public class RecorderCallback implements ISubscribeCallback {
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {
         // filter the message. based on what type it is, create a JSON message to send to DB manager
 
-        // MOVE MESSAGE (move made in a room)
+        // MULTIPLAYER MOVE MESSAGE
         System.out.println("In RecorderCallback.resolved()");
         if (message.getChannel().equals(Channels.ROOM_MOVE.toString())) {
-            System.out.println("(RecorderCallback) Received a MoveData message on Channels.ROOM_MOVE");
+            System.out.println("(RecorderCallback) Received a MoveData message on Channels.ROOM_MOVE for multiplayer");
             MoveData move = GsonWrapper.fromJson(message.getMessage(), MoveData.class);
 
-
+            // if the list of MP moves doesn't yet contain a list of moves for this room,
+            // create one
+            if (!multiplayerMoves.containsKey(move.getRoomID())) {
+                multiplayerMoves.put(move.getRoomID(), new MoveData[9]);
+                multiplayerMoves.get(move.getRoomID())[0] = move;
+            }
+            else {
+                // go through array of moves for this room,
+                // add it to the list
+                MoveData[] l = multiplayerMoves.get(move.getRoomID());
+                int i = 0;
+                while (i <= l.length) {
+                    if (l[i] == null) {
+                        l[i] = move;
+                        break;
+                    }
+                    i++;
+                }
+            }
         }
-        // MULTIPLAYER ROOM MESSAGE
+
+        else if (message.getChannel().equals(Channels.ROOM_MOVE_SINGLEPLAYER.toString())) {
+            System.out.println("(RecorderCallback) got a message on Channels.ROOM_MOVE_SINGLEPLAYER");
+            MoveData move = GsonWrapper.fromJson(message.getMessage(), MoveData.class);
+
+            // if the list of MP moves doesn't yet contain a list of moves for this room,
+            // create one
+            if (!singleplayerMoves.containsKey(move.getRoomID())) {
+                singleplayerMoves.put(move.getRoomID(), new MoveData[9]);
+                singleplayerMoves.get(move.getRoomID())[0] = move;
+            }
+            else {
+                // go through array of moves for this room,
+                // add it to the list
+                MoveData[] l = singleplayerMoves.get(move.getRoomID());
+                int i = 0;
+                while (i <= l.length) {
+                    if (l[i] == null) {
+                        l[i] = move;
+                        break;
+                    }
+                    i++;
+                }
+            }
+        }
+
+
+
+        // ROOM MESSAGE
         else if (message.getChannel().equals(Channels.ROOM.toString())) {
-            System.out.println("(RecorderCallback) Received a RoomData message on Channels.ROOM");
+            System.out.println("(RecorderCallback) Received a RoomData message on Channels.ROOM (ordinary)");
             RoomData room = GsonWrapper.fromJson(message.getMessage(), RoomData.class);
 
             // if room data is a disconnect, then write it and all of its moves
@@ -62,27 +109,48 @@ public class RecorderCallback implements ISubscribeCallback {
                 }
 
                 // find the list of moves associated with this room and write them
-                movesList.forEach((id, moves) -> {
-                    if (id == room.getRoomID()) {
-                        // write all the moves
-                        for (MoveData m : moves) {
-                            if (!DBManager.getInstance().writeMove(m)) {
-                                System.out.println("(RecorderCallback) error writing move: " + m);
-                            }
-                        }
+                for (MoveData m : multiplayerMoves.get(room.getRoomID())) {
+                    if (!DBManager.getInstance().writeMove(m)) {
+                        System.out.println("(RecorderCallback) error writing room: " + m);
                     }
-                });
+                }
 
-                // send message, output log if it fails
-
+                // remove the room-moves pair from the list
+                multiplayerMoves.remove(room.getRoomID(), multiplayerMoves.get(room.getRoomID()));
             }
-
-
         }
 
         // SINGLE PLAYER ROOM MESSAGE
         else if (message.getChannel().equals(Channels.ROOM_SINGLE_PLAYER.toString())) {
+            System.out.println("(RecorderCallback) Received a RoomData message on Channels.ROOM_SINGLE_PLAYER");
+            SinglePlayerRoomData room = GsonWrapper.fromJson(message.getMessage(), SinglePlayerRoomData.class);
 
+            // if a disconnect
+            if (room.getRequest().equals(SinglePlayerRoomData.RequestType.DISCONNECT)) {
+                // send room message, output log if it fails
+                RoomData model = new RoomData();
+                PlayerData computer = new PlayerData();
+                computer.setPlayerUserName("Computer");
+                model.setPlayer1(room.getPlayer());
+                model.setPlayer2(room.getComputer());
+                model.setWinningPlayerID((room.isPlayerWin()) ? room.getPlayer() : room.getComputer());
+                model.setStartingPlayerID((room.isPlayerStart()) ? room.getPlayer() : room.getComputer());
+                model.setStartTime(room.getStartTime());
+                model.setEndTime(room.getEndTime());
+                if (!DBManager.getInstance().writeRoom(model)) {
+                    System.out.println("(RecorderCallback) Error writing SinglePlayerRoomData: " + room);
+                }
+
+                // write all moves associated with this Single Player Room
+                for (MoveData m : singleplayerMoves.get(room.getId())) {
+                    if (!DBManager.getInstance().writeMove(m)) {
+                        System.out.println("(RecorderCallback) [SPR] Error writing move: " + m);
+                    }
+                }
+
+                // remove the room-moves pair from the list
+                singleplayerMoves.remove(room.getId(), singleplayerMoves.get(room.getId()));
+            }
         }
 
         // ACCOUNT CREATED MESSAGE

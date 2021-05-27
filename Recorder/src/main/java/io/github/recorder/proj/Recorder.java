@@ -22,7 +22,9 @@ public class Recorder {
                               Channels.UPDATE.toString(),
                               Channels.UPDATE_USERNAME.toString(),
                               Channels.GET_ROOMS_DATA.toString(),
-                              Channels.GET_MOVES_DATA.toString()
+                              Channels.GET_MOVES_DATA.toString(),
+                              Channels.ROOM_SINGLE_PLAYER.toString(),
+                              Channels.ROOM_MOVE_SINGLEPLAYER.toString()
                             )
                     .execute();
             api.addEventListener(callback,
@@ -33,7 +35,9 @@ public class Recorder {
                     Channels.UPDATE_USERNAME.toString(),
                     Channels.UPDATE_PERSONAL_INFO.toString(),
                     Channels.GET_ROOMS_DATA.toString(),
-                    Channels.GET_MOVES_DATA.toString()
+                    Channels.GET_MOVES_DATA.toString(),
+                    Channels.ROOM_SINGLE_PLAYER.toString(),
+                    Channels.ROOM_MOVE_SINGLEPLAYER.toString()
             );
 
         // hard coded test cases
