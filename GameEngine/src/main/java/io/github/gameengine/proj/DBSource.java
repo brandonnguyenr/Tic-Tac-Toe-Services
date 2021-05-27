@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBSource {
@@ -19,11 +20,16 @@ public class DBSource {
             dataSource.setUrl(properties.getProperty("DB_CONNECTION_URL"));
             dataSource.setUsername(properties.getProperty("DB_USER"));
             dataSource.setPassword(properties.getProperty("DB_PWD"));
+//            dataSource.setValidationQuery("SELECT 1;");
+            //dataSource.setMaxWaitMillis(-1);
+            //dataSource.restart();
+            dataSource.setTestOnBorrow(true);
             // Parameters for connection pooling
 //            basicDS.setInitialSize(10);
             dataSource.setMinIdle(1);
             dataSource.setMaxIdle(6);
             dataSource.setMaxTotal(10);
+
         }catch(IOException e) {
             e.printStackTrace();
         }
