@@ -97,6 +97,7 @@ public class DBManager {
         // recorder DB only writes if both players participated until the game ended (win/tie)
         if (data.getPlayer1() == null || data.getPlayer2() == null) {return -1;}
 
+        System.out.println("\t\tLooking up ids for player1, player2, starter, and winner in room " + data.getRoomID());
         int player1id = getPlayerID(data.getPlayer1().getPlayerUserName());
         int player2id = getPlayerID(data.getPlayer2().getPlayerUserName());
         int starter = getPlayerID(data.getStartingPlayerID().getPlayerUserName());
@@ -133,8 +134,11 @@ public class DBManager {
                 ResultSet response = stat.executeQuery();
         ) {
             // if the execution returns anything other than 0, success. false otherwise, print exception
-            while(response.next())
+            while(response.next()) {
                 temp = response.getInt("id");
+                System.out.println("(writeRoom) temp return value is + " + temp);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -157,7 +161,6 @@ public class DBManager {
      * @see LoginData
      */
     public boolean writeNewPlayer(LoginData data) {
-        // TODO figure out how to check if there's already an entry with this username
         String sql = "INSERT INTO players(username) VALUES(?);";
         boolean temp = false;
         try (

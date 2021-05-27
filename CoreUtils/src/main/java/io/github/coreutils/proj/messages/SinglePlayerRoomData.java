@@ -27,7 +27,6 @@ public class SinglePlayerRoomData {
     }
 
     private int id;
-    private String roomUUID;
     private PlayerData player = null;
     private PlayerData computer = new PlayerData("Computer", null);
     private long startTime;
