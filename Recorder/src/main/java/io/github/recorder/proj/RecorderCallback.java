@@ -111,14 +111,13 @@ public class RecorderCallback implements ISubscribeCallback {
                 int databaseRoomID = DBManager.getInstance().writeRoom(room);
 
                 // find the list of moves associated with this room and write them
-                for (int i = 0; i < singleplayerMoves.get(room.getRoomID()).length; i ++) {
-                    MoveData m = singleplayerMoves.get(room.getRoomID())[i];
+                for (int i = 0; i < multiplayerMoves.get(room.getRoomID()).length; i ++) {
+                    MoveData m = multiplayerMoves.get(room.getRoomID())[i];
                     if (m != null) {
                         m.setRoomID(databaseRoomID);
-                        System.out.println(databaseRoomID);
-                        System.out.println("(RecorderCallback.119) Attempting to write move " + m);
+                        System.out.println("\t(RecorderCallback.119) Attempting to write move " + m);
                         if (!DBManager.getInstance().writeMove(m)) {
-                            System.out.println("(RecorderCallback) (Ordinary Room) Error writing move: " + m);
+                            System.out.println("\t***(RecorderCallback) (Ordinary Room) Error writing move: " + m);
                         }
                     }
                 }
@@ -138,17 +137,6 @@ public class RecorderCallback implements ISubscribeCallback {
                 // send room message, output log if it fails
                 RoomData model = new RoomData();
                 PlayerData computer = new PlayerData("Computer", null);
-
-                // tie logic
-//                if (room.getResult().equals(SinglePlayerRoomData.PlayerResult.WIN)) {
-//                    model.setWinningPlayerID(room.getPlayer());
-//                }
-//                else if (room.getResult().equals(SinglePlayerRoomData.PlayerResult.LOSS))
-//                    model.setWinningPlayerID(computer);
-//                else {
-//                    model.setWinningPlayerID(null);
-//                    model.
-//                }
 //
                 model.setPlayer1(room.getPlayer());
                 model.setPlayer2(room.getComputer());

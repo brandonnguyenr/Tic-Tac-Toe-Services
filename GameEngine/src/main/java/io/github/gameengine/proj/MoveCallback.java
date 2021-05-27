@@ -6,6 +6,7 @@ import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.enginedata.Board;
+import io.github.coreutils.proj.messages.RoomData;
 import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.enginedata.Token;
 import io.github.coreutils.proj.messages.Channels;
@@ -73,6 +74,18 @@ public class MoveCallback implements ISubscribeCallback {
                             .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null, token))
                             .channel(lobby.getRoomData().getRoomChannel())
                             .execute();
+
+                    // PUBLISH ROOM DATA MESSAGE FOR RECORDER - GRANT GOLDSWORTH
+                    RoomData daRoom = lobby.getRoomData();
+                    daRoom.setRoomID(roomID);
+                    System.out.println("(MoveCallback.78) SENDING ROOM DATA FOR MP ON Channels.ROOM: " + lobby.getRoomData());
+                    // determine who da winner is
+                    daRoom.setRequestType(RoomData.RequestType.DISCONNECT);
+                    mApi.publish()
+                            .message(lobby.getRoomData())
+                            .channel(Channels.ROOM.toString())
+                            .execute();
+
                     lobby.endGame();
                 } else if (lobby.getBoard().isBoardFull()) {
                     mApi.publish()
