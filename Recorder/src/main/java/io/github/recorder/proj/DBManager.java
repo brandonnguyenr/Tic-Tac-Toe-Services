@@ -105,11 +105,13 @@ public class DBManager {
         // if there is a tie (winner is not set), use the magic value of the NULL user in the recorder players table
         if (data.getWinningPlayerID() == null) {
             winner = getPlayerID("NULL");
+            System.out.println("(DBManager.108) tie is true!");
             isTie = true;
         }
         else {
             // get the winning player's id
             winner = getPlayerID(data.getWinningPlayerID().getPlayerUserName());
+            System.out.println("(DBManager.114) tie is false!");
         }
 
         System.out.println("(writeRoom) call with " + data + "\n\n");
@@ -238,7 +240,7 @@ public class DBManager {
             }
         }
         catch (Exception ex) {ex.printStackTrace();}
-        System.out.println("getPlayerID(" + username + ") returns " + result);
+//        System.out.println("getPlayerID(" + username + ") returns " + result);
         return result;
     }
 
@@ -269,7 +271,7 @@ public class DBManager {
             }
         }
         catch (Exception ex) {ex.printStackTrace();}
-        System.out.println("getPlayerUsername(" + id + ") returns " + result);
+//        System.out.println("getPlayerUsername(" + id + ") returns " + result);
         return result;
     }
 
