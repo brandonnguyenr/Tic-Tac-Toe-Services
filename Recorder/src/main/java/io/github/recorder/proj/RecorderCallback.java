@@ -8,7 +8,12 @@ import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.messages.*;
 
+import java.util.Map;
+
 public class RecorderCallback implements ISubscribeCallback {
+
+    //  ROOM ID    MOVE ARRAY
+    Map<Integer, MoveData[]> movesList;
 
     @Override
     public void status(MessagingAPI mApi, MsgStatus status) {

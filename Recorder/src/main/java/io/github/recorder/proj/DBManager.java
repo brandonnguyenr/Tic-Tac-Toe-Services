@@ -44,8 +44,7 @@ public class DBManager {
      * @see MoveData
      */
     public boolean writeMove(MoveData data) {
-        // TODO what will determine room id? how am I going to figure out which room this move belongs to?
-        // TODO the same two people can be in multiple rooms over multiple games together, so can't use that as lookup key
+        // TODO figure out a way to indicate a move is the last one in a series of moves
         String sql = "INSERT INTO moves(roomid, playerid, x_coord, y_coord, time) VALUES(?, ?, ?, ?, ?);";
         boolean temp = false;
 
