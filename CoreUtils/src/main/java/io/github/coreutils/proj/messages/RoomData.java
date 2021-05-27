@@ -18,6 +18,7 @@ public class RoomData {
     private String title;
     @Setter(AccessLevel.NONE)
     private int playerCount = 0;
+    private int observers = 0;
     private PlayerData player1 = null;
     private PlayerData player2 = null;
 
@@ -50,10 +51,8 @@ public class RoomData {
     public void addPlayer(PlayerData player) {
         if (getPlayer1() == null) {
             setPlayer1(player);
-            incPlayerCount();
         } else if (getPlayer2() == null) {
             setPlayer2(player);
-            incPlayerCount();
         } else {
             throw new IllegalArgumentException("Game Room is full!");
         }

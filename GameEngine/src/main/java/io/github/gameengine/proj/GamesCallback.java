@@ -42,15 +42,13 @@ public class GamesCallback implements ISubscribeCallback {
 
         if (data.isOpen()) {
             publishRoomList(api);
-        } else {
-            // TODO: idk about this
-            startGame(api, data);
         }
     }
 
     private void joinRoom(MessagingAPI api, RoomData data) {
         if (lobbyMap.containsKey(data.getRoomID()) &&
                 lobbyMap.get(data.getRoomID()).getRoomData().isOpen()) {
+            publishRoomList(api);
             startGame(api, data);
         } else {
             // TODO: register player as spectator
