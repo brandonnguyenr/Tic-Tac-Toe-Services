@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,7 +23,6 @@ public class RoomData {
     private PlayerData player2 = null;
 
     private int roomID = -1;
-    private String roomUUID;
     private String roomChannel = null;
     private RequestType requestType = RequestType.NORMAL;
 

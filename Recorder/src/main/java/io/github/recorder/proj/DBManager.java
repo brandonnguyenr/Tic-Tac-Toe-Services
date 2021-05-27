@@ -132,7 +132,8 @@ public class DBManager {
                 ResultSet response = stat.executeQuery();
         ) {
             // if the execution returns anything other than 0, success. false otherwise, print exception
-            temp = response.getInt("id");
+            while(response.next())
+                temp = response.getInt("id");
         } catch (SQLException e) {
             e.printStackTrace();
         }

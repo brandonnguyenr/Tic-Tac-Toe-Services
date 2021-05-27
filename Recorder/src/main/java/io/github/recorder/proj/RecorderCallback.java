@@ -79,23 +79,22 @@ public class RecorderCallback implements ISubscribeCallback {
             if (!singleplayerMoves.containsKey(move.getRoomID())) {
                 System.out.println("creating a new entry: " + move.getRoomID());
                 singleplayerMoves.put(move.getRoomID(), new MoveData[9]);
-                singleplayerMoves.get(move.getRoomID())[0] = move;
+//                singleplayerMoves.get(move.getRoomID())[0] = move;
             }
-            else {
-                // go through array of moves for this room,
-                // add it to the list
-                System.out.println("Adding move to room " + move.getRoomID());
-                System.out.println(move + "\n");
-                MoveData[] l = singleplayerMoves.get(move.getRoomID());
-                int i = 0;
-                while (i <= l.length) {
-                    if (l[i] == null) {
-                        l[i] = move;
-                        break;
-                    }
-                    i++;
+            // go through array of moves for this room,
+            // add it to the list
+            System.out.println("Adding move to room " + move.getRoomID());
+            System.out.println(move + "\n");
+            MoveData[] l = singleplayerMoves.get(move.getRoomID());
+            int i = 0;
+            while (i <= l.length) {
+                if (l[i] == null) {
+                    l[i] = move;
+                    break;
                 }
+                i++;
             }
+
         }
 
 
@@ -147,10 +146,11 @@ public class RecorderCallback implements ISubscribeCallback {
                 int databaseRoomID = DBManager.getInstance().writeRoom(model);
 
                 for (int i = 0; i < singleplayerMoves.get(room.getId()).length; i ++) {
+                    System.out.println("DEBUG: RecorderCallback.java line 149 -- loop iteration " + i);
                     MoveData m = singleplayerMoves.get(room.getId())[i];
                     if (m != null) {
                         m.setRoomID(databaseRoomID);
-                        System.out.println(room.getId());
+//                        System.out.println(room.getId());
                         System.out.println("Attempting to write move " + m);
                         if (!DBManager.getInstance().writeMove(m)) {
                             System.out.println("(RecorderCallback) [SPR] Error writing move: " + m);
@@ -159,7 +159,9 @@ public class RecorderCallback implements ISubscribeCallback {
                 }
 
                 // remove the room-moves pair from the list
-                singleplayerMoves.remove(room.getId(), singleplayerMoves.get(room.getId()));
+                singleplayerMoves.remove(room.getId());
+                System.out.println("DEBUG: line 163 singlePlayerRooms still contains data for room " + singleplayerMoves.containsKey(room.getId()));
+
             }
         }
 
