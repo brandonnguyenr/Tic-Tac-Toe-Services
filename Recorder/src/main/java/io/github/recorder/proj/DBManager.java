@@ -44,11 +44,10 @@ public class DBManager {
      * @see MoveData
      */
     public boolean writeMove(MoveData data) {
-        // TODO figure out a way to indicate a move is the last one in a series of moves
         String sql = "INSERT INTO moves(roomid, playerid, x_coord, y_coord, time) VALUES(?, ?, ?, ?, ?);";
         boolean temp = false;
 
-        int playerID = getPlayerID(data.getPlayerID());
+        int playerID = getPlayerID(data.getPlayerUserName());
         try (
                 Connection connection = DBSource.getDataSource().getConnection();
                 PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql, data.getRoomID(), playerID, data.getX(), data.getY(), data.getTime()) {
@@ -85,18 +84,18 @@ public class DBManager {
      *     This information is packaged into the {@code RoomData} argument.
      * </p>
      * @param data the data of the room.
-     * @return true if the write attempt was successful
+     * @return the recorder database scope id of the room after it is written, -1 if unsuccessful
      * @author Grant Goldsworth, Kord Boniadi
      * @see RoomData
      */
-    public boolean writeRoom(RoomData data) {
-        boolean temp = false;
+    public int writeRoom(RoomData data) {
+        int temp = -1;
         int winner;
         boolean isTie = false;
 
         // check that both players are not null.
         // recorder DB only writes if both players participated until the game ended (win/tie)
-        if (data.getPlayer1() == null || data.getPlayer2() == null) {return false;}
+        if (data.getPlayer1() == null || data.getPlayer2() == null) {return -1;}
 
         int player1id = getPlayerID(data.getPlayer1().getPlayerUserName());
         int player2id = getPlayerID(data.getPlayer2().getPlayerUserName());
@@ -113,7 +112,7 @@ public class DBManager {
         }
 
         // check if room is open, don't want to be calling data on null players
-        String sql = "INSERT INTO rooms(player1id, player2id, starttime, endtime, startingid, winningid, istie) VALUES(?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO rooms(player1id, player2id, starttime, endtime, startingid, winningid, istie) VALUES(?, ?, ?, ?, ?, ?, ?) RETURNING id;";
         try (
                 Connection connection = DBSource.getDataSource().getConnection();
                 PreparedStatementWrapper stat = new PreparedStatementWrapper(connection, sql,
@@ -129,10 +128,11 @@ public class DBManager {
                         stat.setInt(6, (int) params[5]);        // winningId
                         stat.setBoolean(7, (boolean) params[6]);// isTie
                     }
-                }
+                };
+                ResultSet response = stat.executeQuery();
         ) {
             // if the execution returns anything other than 0, success. false otherwise, print exception
-            if (stat.executeUpdate() != 0) temp = true;
+            temp = response.getInt("id");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -233,6 +233,7 @@ public class DBManager {
             }
         }
         catch (Exception ex) {ex.printStackTrace();}
+        System.out.println("getPlayerID(" + username + ") returns " + result);
         return result;
     }
 
@@ -263,6 +264,7 @@ public class DBManager {
             }
         }
         catch (Exception ex) {ex.printStackTrace();}
+        System.out.println("getPlayerUsername(" + id + ") returns " + result);
         return result;
     }
 

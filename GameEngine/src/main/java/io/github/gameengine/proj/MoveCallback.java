@@ -29,7 +29,7 @@ public class MoveCallback implements ISubscribeCallback {
         int roomID = data.getRoomID();
         if (lobbyList.containsKey(roomID)) {
             lobby = lobbyList.get(roomID);
-            return lobby.isRunning() && lobby.getCurrentPlayer().equals(data.getPlayerID());
+            return lobby.isRunning() && lobby.getCurrentPlayer().equals(data.getPlayerUserName());
         }
         return false;
     }
@@ -66,7 +66,7 @@ public class MoveCallback implements ISubscribeCallback {
             int roomID = data.getRoomID();
             if (isValidMove(data)) {
                 Lobby lobby = lobbyList.get(roomID);
-                Token token = (data.getPlayerID().equals(lobby.getRoomData().getPlayer1().getPlayerUserName())) ? Token.X : Token.O;
+                Token token = (data.getPlayerUserName().equals(lobby.getRoomData().getPlayer1().getPlayerUserName())) ? Token.X : Token.O;
                 lobby.getBoard().updateToken(data.getX(), data.getY(), token);
 
                 //  someone won                       or        the game is a tie

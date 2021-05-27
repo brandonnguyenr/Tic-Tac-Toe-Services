@@ -21,8 +21,9 @@ public class SinglePlayerRoomData {
     }
 
     private int id;
+    private String roomUUID;
     private PlayerData player = null;
-    private PlayerData computer = new PlayerData();
+    private PlayerData computer = new PlayerData("Computer", null);
     private long startTime;
     private long endTime;
     private RequestType request = RequestType.NORMAL;
@@ -49,7 +50,6 @@ public class SinglePlayerRoomData {
         this.request = type;
         this.playerStart = playerStart;
         this.playerWin = win;
-        computer.setPlayerUserName("Computer");
         computer.setType((ai == PlayerData.PlayerType.HUMAN) ? PlayerData.PlayerType.AI_EASY : ai);
     }
 }
