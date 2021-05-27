@@ -8,12 +8,17 @@ import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.messages.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class RecorderCallback implements ISubscribeCallback {
 
     //  ROOM ID    MOVE ARRAY
     Map<Integer, MoveData[]> movesList;
+
+    public RecorderCallback() {
+        movesList = new HashMap<>();
+    }
 
     @Override
     public void status(MessagingAPI mApi, MsgStatus status) {
@@ -35,27 +40,51 @@ public class RecorderCallback implements ISubscribeCallback {
     @Override
     public void resolved(MessagingAPI mApi, MsgResultAPI message) {
         // filter the message. based on what type it is, create a JSON message to send to DB manager
+
         // MOVE MESSAGE (move made in a room)
         System.out.println("In RecorderCallback.resolved()");
         if (message.getChannel().equals(Channels.ROOM_MOVE.toString())) {
             System.out.println("(RecorderCallback) Received a MoveData message on Channels.ROOM_MOVE");
             MoveData move = GsonWrapper.fromJson(message.getMessage(), MoveData.class);
 
-            // send message, output log if it fails
-            if (!DBManager.getInstance().writeMove(move)) {
-                System.out.println("(RecorderCallback) error writing move");
-            }
+
         }
-        // ROOM MESSAGE
+        // MULTIPLAYER ROOM MESSAGE
         else if (message.getChannel().equals(Channels.ROOM.toString())) {
             System.out.println("(RecorderCallback) Received a RoomData message on Channels.ROOM");
             RoomData room = GsonWrapper.fromJson(message.getMessage(), RoomData.class);
 
-            // send message, output log if it fails
-            if (!DBManager.getInstance().writeRoom(room)) {
-                System.out.println("(RecorderCallback) error writing room");
+            // if room data is a disconnect, then write it and all of its moves
+            if (room.getRequestType().equals(RoomData.RequestType.DISCONNECT)) {
+                // send message, output log if it fails
+                if (!DBManager.getInstance().writeRoom(room)) {
+                    System.out.println("(RecorderCallback) error writing room");
+                }
+
+                // find the list of moves associated with this room and write them
+                movesList.forEach((id, moves) -> {
+                    if (id == room.getRoomID()) {
+                        // write all the moves
+                        for (MoveData m : moves) {
+                            if (!DBManager.getInstance().writeMove(m)) {
+                                System.out.println("(RecorderCallback) error writing move: " + m);
+                            }
+                        }
+                    }
+                });
+
+                // send message, output log if it fails
+
             }
+
+
         }
+
+        // SINGLE PLAYER ROOM MESSAGE
+        else if (message.getChannel().equals(Channels.ROOM_SINGLE_PLAYER.toString())) {
+
+        }
+
         // ACCOUNT CREATED MESSAGE
         else if (message.getChannel().equals(Channels.AUTHOR_CREATE.toString())) {
             System.out.println("Inside case for AUTHOR_CREATE loginData");

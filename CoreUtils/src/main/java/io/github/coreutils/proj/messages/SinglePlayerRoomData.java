@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class SinglePlayerRoom {
+public class SinglePlayerRoomData {
     private int id;
     private PlayerData player = null;
     private long startTime;

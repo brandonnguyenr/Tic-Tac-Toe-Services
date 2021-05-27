@@ -18,6 +18,7 @@ public enum Channels {
     ROOM_REQUEST(ROOM.value + "Requests"),
     ROOM_LIST(ROOM.value + "List"),
     ROOM_MOVE(ROOM.value + "Move"),
+    ROOM_SINGLE_PLAYER(ROOM.value + "Singleplayer"),
 
     // BY GRANT GOLDSWORTH
     GET_DATA("Data::"),
