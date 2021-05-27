@@ -23,10 +23,6 @@ public class PlayerData {
     private PlayerType type = PlayerType.HUMAN;
 
 
-    public PlayerData() {
-        // empty
-    }
-
     public PlayerData(String playerUserName, Token playerToken) {
         this.playerUserName = playerUserName;
         this.playerToken = playerToken;

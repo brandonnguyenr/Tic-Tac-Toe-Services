@@ -34,18 +34,14 @@ public class RoomData {
 
     public void setPlayer1(PlayerData player1) {
         if (this.player1 == null)
-            incPlayerCount();
+            playerCount++;
         this.player1 = player1;
     }
 
     public void setPlayer2(PlayerData player2) {
         if (this.player2 == null)
-            incPlayerCount();
+            playerCount++;
         this.player2 = player2;
-    }
-
-    public void incPlayerCount() {
-        playerCount++;
     }
 
     public void addPlayer(PlayerData player) {
