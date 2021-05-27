@@ -107,6 +107,11 @@ public class RecorderCallback implements ISubscribeCallback {
             RoomData room = GsonWrapper.fromJson(message.getMessage(), RoomData.class);
 
             // if room data is a disconnect, then write it and all of its moves
+            // MP Specific - set the start time of the room to be the time of the first move
+            // not accurate but as of current version its the best we got noble team
+            // j a n k y
+            if (multiplayerMoves.get(room.getRoomID())[0] != null)
+                room.setStartTime(multiplayerMoves.get(room.getRoomID())[0].getTime());
             if (room.getRequestType().equals(RoomData.RequestType.DISCONNECT)) {
                 int databaseRoomID = DBManager.getInstance().writeRoom(room);
 
