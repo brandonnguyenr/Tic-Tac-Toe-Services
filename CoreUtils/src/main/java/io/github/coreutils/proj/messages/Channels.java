@@ -22,9 +22,17 @@ public enum Channels {
     // request back channel
     REQUEST("REQUEST::"),
     REQUEST_MOVE(REQUEST.value + "Move"),
+    REQUEST_STATE(REQUEST.value + "State"),
+
+    STATE("STATE::"),
+    ONLINE_STATE(STATE.value + "ONLINE"),
+    OFFLINE_STATE(STATE.value + "OFFLINE"),
 
     //private messages
-    PRIVATE("Private::");
+    PRIVATE("Private::"),
+
+    // builder
+    BUILDER("::");
 
     private final String value;
 

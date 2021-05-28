@@ -8,7 +8,9 @@ import org.postgresql.util.PSQLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBManager extends DBSource{
     private DBManager() {
@@ -21,6 +23,24 @@ public class DBManager extends DBSource{
 
     public static DBManager getInstance() {
         return InstanceHolder.INSTANCE;
+    }
+
+    public List<String> getAllUsers() {
+        List<String> userList = new ArrayList<>();
+        String sql = "select username from users where isdeleted = false order by upper(username);";
+        try (
+                //TODO: Exception thrown here
+                Connection connection = getDataSource().getConnection();
+                Statement stat = connection.createStatement();
+                ResultSet rs2 = stat.executeQuery(sql);
+        ) {
+            while(rs2.next()) {
+                userList.add(rs2.getString("username"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userList;
     }
 
     /**

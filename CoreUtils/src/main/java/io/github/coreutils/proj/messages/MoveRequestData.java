@@ -4,8 +4,10 @@ import io.github.coreutils.proj.enginedata.Board;
 import io.github.coreutils.proj.enginedata.Token;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class MoveRequestData {
     private final Board board;

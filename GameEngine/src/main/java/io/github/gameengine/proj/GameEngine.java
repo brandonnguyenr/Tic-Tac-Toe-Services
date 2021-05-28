@@ -17,6 +17,7 @@ public class GameEngine {
     private RoomsCallback rc;
     private GamesCallback gc;
     private UpdatesCallback uc;
+    private OnlinePlayerCallback oc;
     private static int gameID = 1;
     private final CountDownLatch latch;
 
@@ -30,6 +31,7 @@ public class GameEngine {
         rc = new RoomsCallback(roomList);
         gc = new GamesCallback(roomList, lobbyDir);
         mc = new MoveCallback(lobbyDir);
+        oc = new OnlinePlayerCallback();
         api.subscribe()
                 .channels(Channels.AUTHOR_VALIDATE.toString(),
                         Channels.AUTHOR_CREATE.toString(),
@@ -40,7 +42,10 @@ public class GameEngine {
                         Channels.ROOM_REQUEST.toString(),
                         Channels.REQUEST_MOVE.toString(),
                         Channels.ROOM_MOVE.toString(),
-                        Channels.ROOM_LIST.toString())
+                        Channels.ROOM_LIST.toString(),
+                        "UnexpectedConnectionLost",
+                        Channels.ONLINE_STATE.toString(),
+                        Channels.OFFLINE_STATE.toString())
                 .execute();
 
         api.addEventListener(ac, Channels.AUTHOR_VALIDATE.toString(), Channels.AUTHOR_CREATE.toString());
@@ -49,6 +54,7 @@ public class GameEngine {
         api.addEventListener(rc, Channels.ROOM_LIST.toString());
         api.addEventListener(gc, Channels.ROOM_REQUEST.toString(), Channels.REQUEST_MOVE.toString());
         api.addEventListener(mc, Channels.ROOM_MOVE.toString());
+        api.addEventListener(oc, Channels.ONLINE_STATE.toString(), Channels.OFFLINE_STATE.toString());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (api.isAlive()) {

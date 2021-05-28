@@ -13,73 +13,78 @@ import io.github.coreutils.proj.messages.*;
  */
 public class UpdatesCallback implements ISubscribeCallback {
     @Override
-    public void status(MessagingAPI messagingAPI, MsgStatus msgStatus) {
+    public void status(MessagingAPI mApi, MsgStatus status) {
     }
 
     /**
      * This method will get the data from player and make calls to the database and publish the result
      * back to the particular api call.
-     * @param messagingAPI: api
-     * @param msgResultAPI: api containing the result
+     * @param mApi: api
+     * @param message: api containing the result
      */
     @Override
-    public void resolved(MessagingAPI messagingAPI, MsgResultAPI msgResultAPI) {
-        if (msgResultAPI.getChannel().equals(Channels.UPDATE_USERNAME.toString()) ||
-                msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString()) ||
-                msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString()) ||
-                msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {
+    public void resolved(MessagingAPI mApi, MsgResultAPI message) {
+        if (message.getChannel().equals(Channels.UPDATE_USERNAME.toString()) ||
+                message.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString()) ||
+                message.getChannel().equals(Channels.UPDATE_PASSWORD.toString()) ||
+                message.getChannel().equals(Channels.UPDATE_DELETE.toString())) {
 
-            UpdateData data = GsonWrapper.fromJson(msgResultAPI.getMessage(), UpdateData.class);
+            UpdateData data = GsonWrapper.fromJson(message.getMessage(), UpdateData.class);
 
             try {
-                if (msgResultAPI.getChannel().equals(Channels.UPDATE_USERNAME.toString())) {     //Checking if updating username
+                if (message.getChannel().equals(Channels.UPDATE_USERNAME.toString())) {     //Checking if updating username
                     if (DBManager.getInstance().updateUsername(data)) {                          //checking if username updated
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, true, "Username"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     } else {                                                //update unsuccessful
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, false, "Username"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
-                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString())) {//Checking if updating info
+                } else if (message.getChannel().equals(Channels.UPDATE_PERSONAL_INFO.toString())) {//Checking if updating info
                     if (DBManager.getInstance().updatePersonalInfo(data)) {                             //checking if info updated
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, true, "PersonalInfo"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     } else {                                                //update unsuccessful
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, false, "PersonalInfo"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
-                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_PASSWORD.toString())) {     //Checking if updating password
+                } else if (message.getChannel().equals(Channels.UPDATE_PASSWORD.toString())) {     //Checking if updating password
                     if (DBManager.getInstance().updatePassword(data)) {                                 //checking if password is updated
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, true, "Password"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     } else {                                                //update unsuccessful
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, false, "Password"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
-                } else if (msgResultAPI.getChannel().equals(Channels.UPDATE_DELETE.toString())) {       //checking if updating deletion status
+                } else if (message.getChannel().equals(Channels.UPDATE_DELETE.toString())) {       //checking if updating deletion status
                     if (DBManager.getInstance().updateIsDeleted(data)) {
                         //checking if deletion was successful
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, true, "Delete"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
+                                .execute();
+                        // updates online list in lobby page
+                        mApi.publish()
+                                .message(new OnlineState(data.getUsername(), false))
+                                .channel(Channels.OFFLINE_STATE.toString())
                                 .execute();
                     }
                     else {
-                        messagingAPI.publish()
+                        mApi.publish()
                                 .message(new UpdateResponseData(data, false, "Delete"))
-                                .channel(Channels.PRIVATE + msgResultAPI.getPublisherUuid())
+                                .channel(Channels.PRIVATE + message.getPublisherUuid())
                                 .execute();
                     }
                 }

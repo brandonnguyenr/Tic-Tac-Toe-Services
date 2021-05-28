@@ -9,6 +9,7 @@ import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.LoginData;
 import io.github.coreutils.proj.messages.LoginResponseData;
+import io.github.coreutils.proj.messages.OnlineState;
 
 /**
  * Callback class for the authorization service. This class will get the message from the API and make corresponding
@@ -53,6 +54,11 @@ public class AuthorizationCallback implements ISubscribeCallback{
                                     .message(new LoginResponseData(data, true, "Validate", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
+                            // updates online list in lobby
+                            mApi.publish()
+                                    .message(new OnlineState(data.getUsername(), true))
+                                    .channel(Channels.ONLINE_STATE.toString())
+                                    .execute();
                         }
                     } else {                                                //login unsuccessful
                         mApi.publish()
@@ -66,6 +72,11 @@ public class AuthorizationCallback implements ISubscribeCallback{
                                     .message(new LoginResponseData(data, true, "Create", "false"))
                                     .channel(Channels.PRIVATE + message.getPublisherUuid())
                                     .execute();
+                            // updates online list in lobby
+                            mApi.publish()
+                                .message(new OnlineState(data.getUsername(), false))
+                                .channel(Channels.ONLINE_STATE.toString())
+                                .execute();
                         } else {                                            //account already exists
                             mApi.publish()
                                     .message(new LoginResponseData(data, false, "Create", "false"))

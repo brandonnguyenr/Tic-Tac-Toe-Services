@@ -6,14 +6,12 @@ import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.enginedata.Board;
-import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.enginedata.Token;
 import io.github.coreutils.proj.messages.Channels;
 import io.github.coreutils.proj.messages.MoveData;
 import io.github.coreutils.proj.messages.MoveRequestData;
+import io.github.gameengine.proj.enginedata.Lobby;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class MoveCallback implements ISubscribeCallback {
@@ -82,17 +80,21 @@ public class MoveCallback implements ISubscribeCallback {
                     lobby.endGame();
                 } else {
                     lobby.toggleCurrentPlayer();
-                    List<String> outGoingChannels = new LinkedList<>();
-                    outGoingChannels.add(lobby.getRoomData().getRoomChannel());
-                    if (lobby.getRoomData().getPlayer2().isAI())
-                        outGoingChannels.add(lobby.getRoomData().getPlayer2().getChannel());
-
-                    for (var channelName : outGoingChannels) {
-                        mApi.publish()
-                                .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), lobby.getCurrentPlayer()))
-                                .channel(channelName)
-                                .execute();
-                    }
+//                    List<String> outGoingChannels = new LinkedList<>();
+//                    outGoingChannels.add(lobby.getRoomData().getRoomChannel());
+//                    if (lobby.getRoomData().getPlayer2().isAI())
+//                        outGoingChannels.add(lobby.getRoomData().getPlayer2().getChannel());
+//
+//                    for (var channelName : outGoingChannels) {
+//                        mApi.publish()
+//                                .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), lobby.getCurrentPlayer()))
+//                                .channel(channelName)
+//                                .execute();
+//                    }
+                    mApi.publish()
+                            .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), lobby.getCurrentPlayer()))
+                            .channel(lobby.getRoomData().getRoomChannel())
+                            .execute();
                 }
             }
         }
