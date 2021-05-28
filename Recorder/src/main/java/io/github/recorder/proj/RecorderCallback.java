@@ -61,7 +61,7 @@ public class RecorderCallback implements ISubscribeCallback {
                 // add it to the list
                 MoveData[] l = multiplayerMoves.get(move.getRoomID());
                 int i = 0;
-                while (i <= l.length) {
+                while (i < l.length) {
                     if (l[i] == null) {
                         l[i] = move;
                         break;
@@ -89,7 +89,7 @@ public class RecorderCallback implements ISubscribeCallback {
 //            System.out.println("\t" + move + "\n");
             MoveData[] l = singleplayerMoves.get(move.getRoomID());
             int i = 0;
-            while (i <= l.length) {
+            while (i < l.length) {
                 if (l[i] == null) {
                     l[i] = move;
                     break;
