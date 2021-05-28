@@ -6,6 +6,7 @@ import io.github.API.messagedata.MsgResultAPI;
 import io.github.API.messagedata.MsgStatus;
 import io.github.API.utils.GsonWrapper;
 import io.github.coreutils.proj.enginedata.Board;
+import io.github.coreutils.proj.messages.RoomData;
 import io.github.gameengine.proj.enginedata.Lobby;
 import io.github.coreutils.proj.enginedata.Token;
 import io.github.coreutils.proj.messages.Channels;
@@ -73,11 +74,45 @@ public class MoveCallback implements ISubscribeCallback {
                             .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null, token))
                             .channel(lobby.getRoomData().getRoomChannel())
                             .execute();
+
+                    // PUBLISH ROOM DATA MESSAGE FOR RECORDER - GRANT GOLDSWORTH
+                    RoomData daRoom = lobby.getRoomData();
+                    daRoom.setRoomID(roomID);
+                    daRoom.setStartingPlayerID(daRoom.getPlayer1());
+                    daRoom.setRequestType(RoomData.RequestType.DISCONNECT);
+                    daRoom.setEndTime(data.getTime());
+                    // player 1 is X, so if this is true then p1 is da winner
+                    if (isWinner(lobby.getBoard(), Token.X)) {
+                        daRoom.setWinningPlayerID(daRoom.getPlayer1());
+                    }
+                    else {
+                        // otherwise it be player 2
+                        daRoom.setWinningPlayerID(daRoom.getPlayer2());
+                    }
+//                    System.out.println("(MoveCallback.78) SENDING ROOM DATA FOR MP ON Channels.ROOM: " + lobby.getRoomData());
+                    mApi.publish()
+                            .message(lobby.getRoomData())
+                            .channel(Channels.ROOM.toString())
+                            .execute();
+
                     lobby.endGame();
+
                 } else if (lobby.getBoard().isBoardFull()) {
+                    // TIE CASE - winner is left as null
+                    RoomData daRoom = lobby.getRoomData();
+                    daRoom.setRoomID(roomID);
+                    daRoom.setStartingPlayerID(daRoom.getPlayer1());
+                    daRoom.setRequestType(RoomData.RequestType.DISCONNECT);
+                    daRoom.setEndTime(data.getTime());
                     mApi.publish()
                             .message(new MoveRequestData(lobby.getBoard(), lobby.getRoomData(), null))
                             .channel(lobby.getRoomData().getRoomChannel())
+                            .execute();
+
+                    // PUBLISH ROOM DATA MESSAGE FOR RECORDER - GRANT GOLDSWORTH
+                    mApi.publish()
+                            .message(daRoom)
+                            .channel(Channels.ROOM.toString())
                             .execute();
                     lobby.endGame();
                 } else {

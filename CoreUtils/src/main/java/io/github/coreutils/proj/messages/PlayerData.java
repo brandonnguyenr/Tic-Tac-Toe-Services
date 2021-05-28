@@ -19,7 +19,6 @@ public class PlayerData {
     private String playerUserName = null;
     private Token playerToken = Token.BLANK;
     private String channel = null;
-    @Setter(AccessLevel.NONE)
     private PlayerType type = PlayerType.HUMAN;
 
 

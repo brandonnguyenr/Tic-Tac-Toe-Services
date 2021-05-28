@@ -13,11 +13,18 @@ public enum Channels {
     UPDATE_PASSWORD(UPDATE.value + "Password"),
     UPDATE_DELETE(UPDATE.value + "Delete"),
 
-    // game engine messages
+    //game engine messages
     ROOM("Room::"),
     ROOM_REQUEST(ROOM.value + "Requests"),
     ROOM_LIST(ROOM.value + "List"),
     ROOM_MOVE(ROOM.value + "Move"),
+    ROOM_SINGLE_PLAYER(ROOM.value + "Singleplayer"),
+    ROOM_MOVE_SINGLEPLAYER(ROOM.value + "Singleplayer Move"),
+
+    // BY GRANT GOLDSWORTH
+    GET_DATA("Data::"),
+    GET_ROOMS_DATA(GET_DATA.value + "Rooms"),
+    GET_MOVES_DATA(GET_DATA.value + "Moves"),
 
     // request back channel
     REQUEST("REQUEST::"),
