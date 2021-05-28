@@ -89,7 +89,7 @@ public class MoveCallback implements ISubscribeCallback {
                         // otherwise it be player 2
                         daRoom.setWinningPlayerID(daRoom.getPlayer2());
                     }
-                    System.out.println("(MoveCallback.78) SENDING ROOM DATA FOR MP ON Channels.ROOM: " + lobby.getRoomData());
+//                    System.out.println("(MoveCallback.78) SENDING ROOM DATA FOR MP ON Channels.ROOM: " + lobby.getRoomData());
                     mApi.publish()
                             .message(lobby.getRoomData())
                             .channel(Channels.ROOM.toString())

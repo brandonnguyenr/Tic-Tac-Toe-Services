@@ -97,7 +97,7 @@ public class DBManager {
         // recorder DB only writes if both players participated until the game ended (win/tie)
         if (data.getPlayer1() == null || data.getPlayer2() == null) {return -1;}
 
-        System.out.println("\t\tLooking up ids for player1, player2, starter, and winner in room " + data.getRoomID());
+//        System.out.println("\t\tLooking up ids for player1, player2, starter, and winner in room " + data.getRoomID());
         int player1id = getPlayerID(data.getPlayer1().getPlayerUserName());
         int player2id = getPlayerID(data.getPlayer2().getPlayerUserName());
         int starter = getPlayerID(data.getStartingPlayerID().getPlayerUserName());
@@ -105,16 +105,16 @@ public class DBManager {
         // if there is a tie (winner is not set), use the magic value of the NULL user in the recorder players table
         if (data.getWinningPlayerID() == null) {
             winner = getPlayerID("NULL");
-            System.out.println("(DBManager.108) tie is true!");
+//            System.out.println("(DBManager.108) tie is true!");
             isTie = true;
         }
         else {
             // get the winning player's id
             winner = getPlayerID(data.getWinningPlayerID().getPlayerUserName());
-            System.out.println("(DBManager.114) tie is false!");
+//            System.out.println("(DBManager.114) tie is false!");
         }
 
-        System.out.println("(writeRoom) call with " + data + "\n\n");
+//        System.out.println("(writeRoom) call with " + data + "\n\n");
         // check if room is open, don't want to be calling data on null players
         String sql = "INSERT INTO rooms(player1id, player2id, starttime, endtime, startingid, winningid, istie) VALUES(?, ?, ?, ?, ?, ?, ?) RETURNING id;";
         try (
@@ -138,7 +138,7 @@ public class DBManager {
             // if the execution returns anything other than 0, success. false otherwise, print exception
             while(response.next()) {
                 temp = response.getInt("id");
-                System.out.println("(writeRoom) temp return value is + " + temp);
+//                System.out.println("(writeRoom) temp return value is + " + temp);
             }
 
         } catch (SQLException e) {
@@ -189,8 +189,8 @@ public class DBManager {
      * @author Grant Goldsworth
      */
     public boolean updatePlayerUsername(UpdateData data) {
-        System.out.println("DEBUG: old username = " + data.getUsername());
-        System.out.println("DEBUG: new username = " + data.getNewUsername());
+//        System.out.println("DEBUG: old username = " + data.getUsername());
+//        System.out.println("DEBUG: new username = " + data.getNewUsername());
         String sql = "UPDATE players SET username = ? WHERE username = ?";
         boolean result = false;
         try (
